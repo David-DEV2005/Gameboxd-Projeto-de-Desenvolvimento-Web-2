@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User # O Django já traz uma tabela de Usuário pronta!
+from django.contrib.auth.models import User 
 
 class Jogo(models.Model):
     titulo = models.CharField(max_length=200)
@@ -7,13 +7,13 @@ class Jogo(models.Model):
     plataforma = models.CharField(max_length=100)
     nota_media = models.FloatField(default=0.0)
 
-    def str(self):
+    def __str__(self):
         return self.titulo
 
 class Avaliacao(models.Model):
     jogo = models.ForeignKey(Jogo, on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    nota = models.IntegerField() # Ex: 1 a 5
+    nota = models.FloatField()
     comentario = models.TextField()
     data_publicacao = models.DateTimeField(auto_now_add=True)
 
@@ -24,6 +24,5 @@ class Grupo(models.Model):
     descricao = models.TextField()
     vagas_disponiveis = models.IntegerField()
 
-    def str(self):
+    def __str__(self):
         return self.nome
-
