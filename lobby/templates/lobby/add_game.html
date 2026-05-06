@@ -1,0 +1,41 @@
+{% extends 'lobby/base.html' %}
+{% block content %}
+{% load static %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">Adicionar Novo Jogo ao Catálogo</h4>
+            </div>
+            
+            <div class="card-body">
+                <form method="POST" action="{% url 'add_game' %}">
+                    
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título do Jogo</label>
+                        <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Ex: The Witcher 3" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="genero" class="form-label">Gênero</label>
+                        <input type="text" class="form-control" id="genero" name="genero" placeholder="Ex: RPG de Ação" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="plataforma" class="form-label">Plataforma</label>
+                        <input type="text" class="form-control" id="plataforma" name="plataforma" placeholder="Ex: PC, PS5, Xbox" required>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'index' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-success">Salvar Jogo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
