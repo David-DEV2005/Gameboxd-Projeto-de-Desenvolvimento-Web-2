@@ -1,0 +1,34 @@
+{% extends 'lobby/base.html' %}
+{% block content %}
+{% load static %}
+<div class="row mb-4">
+    <div class="col">
+        <h2>Catálogo de Jogos</h2>
+        <p class="text-muted">Encontre seu jogo, veja avaliações e ache sua equipe.</p>
+        <a href="{% url 'add_game' %}" class="btn btn-success"> + Adicionar Jogo ao Catálogo </a>
+    </div>
+</div>
+
+<div class="row">
+    {% for jogo in jogos %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ jogo.titulo }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ jogo.genero }} / {{ jogo.plataforma }}</h6>
+                <p class="card-text">Nota Média: ⭐ {{ jogo.nota_media }}</p>
+                <a href="{% url 'game_wall' jogo.id %}" class="btn btn-primary w-100">Entrar no Lobby</a>
+            </div>
+        </div>
+    </div>
+    
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center shadow-sm">
+            Nenhum jogo no catálogo ainda. Seja o primeiro a adicionar!
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
