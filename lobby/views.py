@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Jogo, Avaliacao, Grupo
+from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     # Busca todos os jogos cadastrados no banco 
@@ -103,6 +105,65 @@ def group(request, id):
 
     # Se não for POST, mostra a tela com o formulário vazio
     return render(request, 'lobby/group.html', {'jogo': jogo})
+
+@login_required
+def solicitar_entrada(request, grupo_id):
+    # Busca o grupo no banco de dados
+    grupo = Grupo.objects.get(id=grupo_id)
+    
+    # O líder não pode pedir para entrar no próprio grupo
+    if request.user == grupo.lider:
+        return redirect('game_wall', id=grupo.jogo_foco.id)
+        
+    # Verifica se o usuário já mandou uma solicitação antes para não duplicar
+    ja_solicitou = SolicitacaoGrupo.objects.filter(grupo=grupo, usuario=request.user).exists()
+    
+    if not ja_solicitou:
+        # Se não solicitou ainda, cria a solicitação no banco como "Pendente"
+        SolicitacaoGrupo.objects.create(
+            grupo=grupo,
+            usuario=request.user
+        )
+        
+    # Redireciona de volta para a tela do jogo
+    return redirect('game_wall', id=grupo.jogo_foco.id)
+
+@login_required
+def painel_notificacoes(request):
+    # Grupos que eu criei
+    meus_grupos = Grupo.objects.filter(lider=request.user)
+    
+    # Solicitações pendentes 
+    solicitacoes_pendentes = SolicitacaoGrupo.objects.filter(
+        grupo__in=meus_grupos, 
+        status='Pendente'
+    ).order_by('-data_solicitacao')
+    
+    return render(request, 'lobby/notify.html', {
+        'solicitacoes': solicitacoes_pendentes,
+        'meus_grupos': meus_grupos
+    })
+
+@login_required
+def responder_solicitacao(request, solicitacao_id, acao):
+    if request.method == 'POST':
+        solicitacao = SolicitacaoGrupo.objects.get(id=solicitacao_id)
+        
+        # só o líder do grupo pode aceitar ou recusar
+        if request.user == solicitacao.grupo.lider:
+            
+            if acao == 'aceitar' and solicitacao.grupo.vagas_disponiveis > 0:
+                solicitacao.status = 'Aprovada'
+                solicitacao.grupo.vagas_disponiveis -= 1
+                solicitacao.grupo.save()
+                
+            elif acao == 'recusar':
+                solicitacao.status = 'Rejeitada'
+            
+            solicitacao.save()
+            
+    return redirect('painel_notificacoes')
+
 
 def register(request):
     if request.method == 'POST':
