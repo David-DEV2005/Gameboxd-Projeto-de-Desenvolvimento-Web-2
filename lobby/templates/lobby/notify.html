@@ -1,0 +1,77 @@
+{% extends 'lobby/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <h3 class="mb-4">🔔 Suas Notificações</h3>
+
+        {% if solicitacoes %}
+            <div class="list-group shadow-sm">
+                {% for req in solicitacoes %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center p-4">
+                        <div>
+                            <h6 class="mb-1">
+                                O usuário <strong class="text-primary">@{{ req.usuario.username }}</strong> pediu para entrar no seu grupo!
+                            </h6>
+                            <small class="text-muted">
+                                Grupo: <strong>{{ req.grupo.nome }}</strong> (Jogo: {{ req.grupo.jogo_foco.titulo }})
+                            </small>
+                            <br>
+                            <small class="text-muted">
+                                Vagas restantes neste grupo: {{ req.grupo.vagas_disponiveis }}
+                            </small>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <form method="POST" action="{% url 'responder_solicitacao' req.id 'aceitar' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-sm">Aceitar</button>
+                            </form>
+                            
+                            <form method="POST" action="{% url 'responder_solicitacao' req.id 'recusar' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Recusar</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-light text-center p-5 shadow-sm">
+                <h5 class="text-muted mb-0">Você não tem novas solicitações no momento. 😴</h5>
+            </div>
+        {% endif %}
+    </div>
+    <hr class="my-5">
+        <h3 class="mb-4">🛡️ Seus Grupos e Membros</h3>
+        <div class="row">
+            {% for gp in meus_grupos %}
+                <div class="col-md-6 mb-3">
+                    <div class="card border-left-primary shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ gp.nome }}</h5>
+                            <p class="small text-muted mb-2">Jogo: {{ gp.jogo_foco.titulo }}</p>
+                            
+                            <h6>Membros:</h6>
+                            <ul class="list-unstyled">
+                                <li><span class="badge bg-dark">👑 Líder: @{{ gp.lider.username }}</span></li>
+                                
+                                {% for m in gp.solicitacaogrupo_set.all %}
+                                    {% if m.status == 'Aprovada' %}
+                                        <li class="mt-1">
+                                            <span class="badge bg-info text-dark">👤 @{{ m.usuario.username }}</span>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            
+                            <p class="small mt-2 mb-0">Vagas restantes: <strong>{{ gp.vagas_disponiveis }}</strong></p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Você ainda não criou nenhum grupo.</p>
+            {% endfor %}
+        </div>
+</div>
+{% endblock %}
