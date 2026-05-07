@@ -103,3 +103,19 @@ def group(request, id):
 
     # Se não for POST, mostra a tela com o formulário vazio
     return render(request, 'lobby/group.html', {'jogo': jogo})
+
+def register(request):
+    if request.method == 'POST':
+        # Recebe os dados do formulário de criação de usuário
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            # Salva o novo usuário no banco de dados
+            user = form.save()
+            # Loga o usuário automaticamente após criar a conta
+            login(request, user)
+            return redirect('index')
+    else:
+        # Se não for POST, mostra o formulário vazio
+        form = UserCreationForm()
+
+    return render(request, 'lobby/register.html', {'form': form})
