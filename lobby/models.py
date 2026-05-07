@@ -26,3 +26,18 @@ class Grupo(models.Model):
 
     def __str__(self):
         return self.nome
+    
+class SolicitacaoGrupo(models.Model):
+    STATUS_CHOICES = (
+        ('Pendente', 'Pendente'),
+        ('Aprovada', 'Aprovada'),
+        ('Rejeitada', 'Rejeitada'),
+    )
+
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pendente')
+    data_solicitacao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} -> {self.grupo.nome} ({self.status})"
