@@ -180,3 +180,9 @@ def register(request):
         form = UserCreationForm()
 
     return render(request, 'lobby/register.html', {'form': form})
+
+def wall_rating(request):
+    # Puxa todas as avaliações do banco de dados. 
+    avaliacoes = Avaliacao.objects.all().order_by('-id')
+
+    return render(request, 'lobby/wall_rating.html', {'avaliacoes': avaliacoes})
