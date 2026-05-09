@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo
+from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from .forms import PerfilForm
+
 
 
 def index(request):
@@ -186,3 +188,39 @@ def wall_rating(request):
     avaliacoes = Avaliacao.objects.all().order_by('-id')
 
     return render(request, 'lobby/wall_rating.html', {'avaliacoes': avaliacoes})
+
+@login_required
+def my_profile(request):
+    # Puxa ou cria o perfil caso não exista
+    perfil, created = Perfil.objects.get_or_create(user=request.user)
+
+
+    minhas_reviews = Avaliacao.objects.filter(usuario=request.user).order_by('-id')
+
+
+    meus_grupos = Grupo.objects.filter(lider=request.user)
+
+    influencia = perfil.calcular_influencia()
+
+    return render(request, 'lobby/profile.html', {
+        'perfil': perfil,
+        'reviews': minhas_reviews,
+        'grupos': meus_grupos,
+        'influencia': influencia
+    })
+
+@login_required
+def editar_perfil(request):
+    # Puxa o perfil do usuário logado
+    perfil, created = Perfil.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        
+        form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        if form.is_valid():
+            form.save()
+            return redirect('my_profile')
+    else:
+        form = PerfilForm(instance=perfil)
+
+    return render(request, 'lobby/edit_profile.html', {'form': form})

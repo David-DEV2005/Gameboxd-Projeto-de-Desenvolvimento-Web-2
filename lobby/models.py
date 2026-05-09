@@ -41,3 +41,22 @@ class SolicitacaoGrupo(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} -> {self.grupo.nome} ({self.status})"
+    
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    foto = models.ImageField(upload_to='perfis/', default='perfis/default.png', blank=True)
+    bio = models.TextField(max_length=300, blank=True)
+
+    def calcular_influencia(self):
+        qtd_reviews = self.user.avaliacao_set.count()
+        if qtd_reviews < 3:
+            return {"rank": "Novato", "cor": "secondary"}
+        elif qtd_reviews < 10:
+            return {"rank": "Explorador", "cor": "info"}
+        elif qtd_reviews < 20:
+            return {"rank": "Crítico Veterano", "cor": "warning"}
+        else:
+            return {"rank": "Lenda do Lobby", "cor": "danger"}
+
+    def __str__(self):
+        return f"Perfil de {self.user.username}"

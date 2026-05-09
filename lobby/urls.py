@@ -26,7 +26,11 @@ urlpatterns = [
     path('notificacoes/<int:solicitacao_id>/<str:acao>/', views.responder_solicitacao, name='responder_solicitacao'),
 
     path('avaliacoes/', views.wall_rating, name='wall_rating'),
-    
+
+    path('perfil/', views.my_profile, name='my_profile'),
+
+    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
+
 ]
 
 
