@@ -15,13 +15,15 @@
             
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
-                    
+                    <li class="nav-item me-3 mt-1">
+                        <a class="nav-link fw-bold" href="{% url 'wall_rating' %}">⭐ Feed de Reviews</a>
+                    </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item me-3 mt-1">
                             <a class="nav-link text-warning fw-bold" href="{% url 'painel_notificacoes' %}">🔔 Notificações</a>
                         </li>
                         <li class="nav-item">
-                            <span class="nav-link text-primary fw-bold">Olá, @{{ user.username }}</span>
+                            <span class="nav-link text-primary fw-bold">Olá, {{ user.username }}</span>
                         </li>
                         <li class="nav-item ms-2">
                             <form method="POST" action="{% url 'logout' %}">
