@@ -24,6 +24,9 @@ urlpatterns = [
     path('notificacoes/', views.painel_notificacoes, name='painel_notificacoes'),
     
     path('notificacoes/<int:solicitacao_id>/<str:acao>/', views.responder_solicitacao, name='responder_solicitacao'),
+
+    path('avaliacoes/', views.wall_rating, name='wall_rating'),
+    
 ]
 
 
