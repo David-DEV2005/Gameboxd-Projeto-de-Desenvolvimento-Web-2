@@ -31,6 +31,11 @@
                                 <button type="submit" class="btn btn-outline-danger btn-sm mt-1">Sair</button>
                             </form>
                         </li>
+
+                        <li class="nav-item me-3 mt-1">
+                            <a class="nav-link text-info fw-bold" href="{% url 'my_profile' %}">👤 Meu Perfil</a>
+                        </li>
+                        
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'login' %}">Entrar</a>
