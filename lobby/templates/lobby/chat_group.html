@@ -1,0 +1,57 @@
+{% extends 'lobby/base.html' %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body bg-dark text-white rounded d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-0">🚪 Sala Privada: {{ grupo.nome }}</h4>
+                    <small class="text-light">Jogo Foco: {{ grupo.jogo_foco.titulo }}</small>
+                </div>
+                <a href="{% url 'game_wall' grupo.jogo_foco.id %}" class="btn btn-outline-light btn-sm">Voltar ao Jogo</a>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-3 border-secondary">
+            <div class="card-body bg-light" style="height: 500px; overflow-y: auto; display: flex; flex-direction: column;">
+                {% for msg in mensagens %}
+                    <div class="mb-3 {% if msg.usuario == user %}text-end{% endif %}">
+                        <small class="text-muted fw-bold">@{{ msg.usuario.username }}</small><br>
+                        
+                        <div class="d-inline-block p-2 rounded shadow-sm text-start {% if msg.usuario == user %}bg-primary text-white{% else %}bg-white border{% endif %}" style="max-width: 75%;">
+                            {{ msg.texto }}
+                        </div>
+                        
+                        <div style="font-size: 0.70rem;" class="text-muted mt-1">{{ msg.data_envio|date:"d/m H:i" }}</div>
+                    </div>
+                {% empty %}
+                    <div class="text-center text-muted my-auto">
+                        <h5 class="mb-2">A sala está vazia!</h5>
+                        <p>Diga olá para a sua equipe e combine a próxima partida! 👋</p>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-group shadow-sm">
+                <input type="text" name="texto" class="form-control p-3 border-primary" placeholder="Digite sua mensagem para a equipe..." required autocomplete="off" autofocus>
+                <button class="btn btn-primary px-4 fw-bold" type="submit">Enviar 🚀</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var chatBox = document.querySelector('.card-body.bg-light');
+        if (chatBox) {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    });
+</script>
+{% endblock %}
