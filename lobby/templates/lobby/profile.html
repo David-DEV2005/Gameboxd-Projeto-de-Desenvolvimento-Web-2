@@ -1,37 +1,72 @@
 {% extends 'lobby/base.html' %}
-
 {% block content %}
 <div class="row mt-5">
     <div class="col-md-4 text-center">
         <div class="card shadow p-4">
             <img src="{{ perfil.foto.url }}" class="rounded-circle img-thumbnail mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-            <h4>@{{ user.username }}</h4>
+            <h4>{{ user.username }}</h4>
             <span class="badge bg-{{ influencia.cor }} fs-6 mb-3">{{ influencia.rank }}</span>
             <p class="text-muted">{{ perfil.bio }}</p>
             <hr>
             <a href="{% url 'editar_perfil' %}" class="btn btn-primary btn-sm w-100 mb-2">✏️ Editar Perfil</a>
+            <a href="{% url 'password_change' %}" class="btn btn-outline-secondary btn-sm w-100 mb-2">Alterar Senha</a>
+            <div class="mt-4 text-end"> <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger fw-bold shadow-sm"> Sair</button>
+                </form>
+            </div>
             <hr>
         </div>
     </div>
 
     <div class="col-md-8">
         <h3>🎮 Sua Jornada</h3>
-        <ul class="nav nav-tabs" id="perfilTabs">
-            <li class="nav-item"><a class="nav-link active" href="#">Suas Avaliações</a></li>
+        
+        <ul class="nav nav-tabs" id="perfilTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="avaliacoes-tab" data-bs-toggle="tab" data-bs-target="#avaliacoes" type="button" role="tab">Suas Avaliações</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="grupos-tab" data-bs-toggle="tab" data-bs-target="#grupos" type="button" role="tab">Seus Grupos</button>
+            </li>
         </ul>
         
-        <div class="mt-3">
-            {% for r in reviews %}
-                <div class="card mb-2 border-0 shadow-sm">
-                    <div class="card-body">
-                        <strong>{{ r.jogo.titulo }}</strong> - Nota: <span class="badge bg-success">{{ r.nota }}</span>
-                        <p class="mb-0 small text-muted">"{{ r.comentario }}"</p>
+        <div class="tab-content mt-3" id="perfilTabsContent">
+            
+            <div class="tab-pane fade show active" id="avaliacoes" role="tabpanel">
+                {% for r in reviews %}
+                    <div class="card card-dark mb-2 border-0 shadow-sm">
+                        <div class="card-body">
+                            <strong>{{ r.jogo.titulo }}</strong>
+                            <div class="mb-2">
+                                <span class="render-estrelas" data-nota="{{ r.nota }}"></span>
+                            </div>
+                            <p class="mb-0 small text-muted">"{{ r.comentario }}"</p>
+                        </div>
                     </div>
+                {% empty %}
+                    <p class="text-muted mt-3">Você ainda não avaliou nenhum jogo.</p>
+                {% endfor %}
+            </div>
+
+            <div class="tab-pane fade" id="grupos" role="tabpanel">
+                <div class="row mt-3">
+                    {% for grupo in grupos %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card card-dark h-100 shadow-sm border-0 p-3">
+                                <h6 class="fw-bold text-primary mb-1">{{ grupo.nome }}</h6>
+                                <p class="small text-muted mb-2">Jogo: {{ grupo.jogo_foco.titulo }}</p>
+                                
+                                <a href="{% url 'sala_grupo' grupo.id %}" class="btn btn-sm btn-success w-100 mt-auto">
+                                    🚪 Entrar na Sala
+                                </a>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">Você ainda não participa de nenhum grupo.</p>
+                    {% endfor %}
                 </div>
-            {% empty %}
-                <p>Você ainda não avaliou nenhum jogo.</p>
-            {% endfor %}
+            </div>
+
         </div>
-    </div>
-</div>
 {% endblock %}
