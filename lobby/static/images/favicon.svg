@@ -1,0 +1,82 @@
+<svg width="100%" viewBox="0 0 690 490" role="img" xmlns="http://www.w3.org/2000/svg" style="">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">PlayStation buttons neon glow v3</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Botões do PlayStation com borda branca destacada por bordas pretas internas e externas</desc>
+
+  <defs>
+    <filter id="g-green" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="g-pink" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="g-red" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="g-blue" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="g-white" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <pattern id="checker" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#2a2a2a"/>
+      <rect x="12" y="0" width="12" height="12" fill="#1e1e1e"/>
+      <rect x="0" y="12" width="12" height="12" fill="#1e1e1e"/>
+      <rect x="12" y="12" width="12" height="12" fill="#2a2a2a"/>
+    </pattern>
+
+    <radialGradient id="a-green" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00ff44" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#00ff44" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="a-pink" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff44cc" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#ff44cc" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="a-red" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff3333" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#ff3333" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="a-blue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3399ff" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#3399ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ambient blobs -->
+  <ellipse cx="340" cy="140" rx="110" ry="90" fill="url(#a-green)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <ellipse cx="240" cy="240" rx="110" ry="90" fill="url(#a-pink)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <ellipse cx="440" cy="240" rx="110" ry="90" fill="url(#a-red)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <ellipse cx="340" cy="340" rx="110" ry="90" fill="url(#a-blue)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- losango: borda preta externa (mais grossa) -->
+  <polygon points="340,30 630,240 340,450 50,240" fill="none" stroke="black" stroke-width="9" opacity="0.9" style="fill:none;stroke:rgb(0, 0, 0);color:rgb(255, 255, 255);stroke-width:9px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.9;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- losango: glow branco -->
+  <polygon points="340,30 630,240 340,450 50,240" fill="none" stroke="white" stroke-width="2.5" filter="url(#g-white)" opacity="0.95" style="fill:none;stroke:rgb(255, 255, 255);color:rgb(255, 255, 255);stroke-width:2.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.95;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- losango: borda branca nítida central -->
+  <polygon points="340,30 630,240 340,450 50,240" fill="none" stroke="white" stroke-width="2.5" opacity="1" style="fill:none;stroke:rgb(255, 255, 255);color:rgb(255, 255, 255);stroke-width:2.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- losango: borda preta interna (mais fina) -->
+  <polygon points="340,30 630,240 340,450 50,240" fill="none" stroke="black" stroke-width="4.5" opacity="0.85" style="paint-order: stroke; stroke-dasharray: none;fill:none;stroke:rgb(0, 0, 0);color:rgb(255, 255, 255);stroke-width:4.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.85;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto" transform="scale(0.965) translate(11.9, 8.4)"/>
+
+  <!-- TRIÂNGULO verde -->
+  <polygon points="340,88 400,178 280,178" fill="none" stroke="#00ee44" stroke-width="8" stroke-linejoin="round" filter="url(#g-green)" style="fill:none;stroke:rgb(0, 238, 68);color:rgb(255, 255, 255);stroke-width:8px;stroke-linecap:butt;stroke-linejoin:round;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- QUADRADO rosa -->
+  <rect x="196" y="196" width="88" height="88" rx="5" fill="none" stroke="#ff33cc" stroke-width="8" filter="url(#g-pink)" style="fill:none;stroke:rgb(255, 51, 204);color:rgb(255, 255, 255);stroke-width:8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- CÍRCULO vermelho -->
+  <circle cx="440" cy="240" r="46" fill="none" stroke="#ff2222" stroke-width="8" filter="url(#g-red)" style="fill:none;stroke:rgb(255, 34, 34);color:rgb(255, 255, 255);stroke-width:8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- X azul -->
+  <line x1="306" y1="306" x2="374" y2="374" stroke="#2288ff" stroke-width="10" stroke-linecap="round" filter="url(#g-blue)" style="fill:rgb(0, 0, 0);stroke:rgb(34, 136, 255);color:rgb(255, 255, 255);stroke-width:10px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="374" y1="306" x2="306" y2="374" stroke="#2288ff" stroke-width="10" stroke-linecap="round" filter="url(#g-blue)" style="fill:rgb(0, 0, 0);stroke:rgb(34, 136, 255);color:rgb(255, 255, 255);stroke-width:10px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+</svg>

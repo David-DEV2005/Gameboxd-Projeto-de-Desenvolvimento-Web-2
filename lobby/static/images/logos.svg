@@ -1,0 +1,63 @@
+<svg width="100%" viewBox="0 0 680 120" role="img" xmlns="http://www.w3.org/2000/svg" style="">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Gamerboxd logo Ragedap</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Logo Gamerboxd fonte Ragedap ícones PS2 encadeados cores uniformes</desc>
+
+  <defs>
+    
+
+    <filter id="fg" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="fp" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="fr" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="fb" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <clipPath id="rA"><rect x="24" y="0" width="200" height="120"/></clipPath>
+    <clipPath id="rB"><rect x="58" y="0" width="200" height="120"/></clipPath>
+    <clipPath id="rC"><rect x="92" y="0" width="200" height="120"/></clipPath>
+    <clipPath id="lB"><rect x="0" y="0" width="58" height="120"/></clipPath>
+    <clipPath id="lC"><rect x="0" y="0" width="92" height="120"/></clipPath>
+    <clipPath id="lD"><rect x="0" y="0" width="126" height="120"/></clipPath>
+    <clipPath id="cA"><circle cx="24" cy="60" r="22"/></clipPath>
+    <clipPath id="cB"><circle cx="58" cy="60" r="22"/></clipPath>
+    <clipPath id="cC"><circle cx="92" cy="60" r="22"/></clipPath>
+    <clipPath id="cD"><circle cx="126" cy="60" r="22"/></clipPath>
+  </defs>
+
+  <!-- D: X AZUL — atrás de tudo -->
+  <circle cx="126" cy="60" r="22" fill="none" stroke="#2288ff" stroke-width="2.2" style="fill:none;stroke:rgb(34, 136, 255);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="113" y1="47" x2="139" y2="73" stroke="#2288ff" stroke-width="3" stroke-linecap="round" filter="url(#fb)" clip-path="url(#cD)" style="fill:rgb(0, 0, 0);stroke:rgb(34, 136, 255);color:rgb(255, 255, 255);stroke-width:3px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="139" y1="47" x2="113" y2="73" stroke="#2288ff" stroke-width="3" stroke-linecap="round" filter="url(#fb)" clip-path="url(#cD)" style="fill:rgb(0, 0, 0);stroke:rgb(34, 136, 255);color:rgb(255, 255, 255);stroke-width:3px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- C: CÍRCULO VERMELHO — atrás de B, na frente de D -->
+  <path d="M92,38 A22,22 0 0,0 92,82" fill="none" stroke="#ff2222" stroke-width="2.2" clip-path="url(#lC)" style="fill:none;stroke:rgb(255, 34, 34);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <path d="M92,38 A22,22 0 0,1 92,82" fill="none" stroke="#ff2222" stroke-width="2.2" style="fill:none;stroke:rgb(255, 34, 34);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <circle cx="92" cy="60" r="12" fill="none" stroke="#ff2222" stroke-width="2.8" filter="url(#fr)" clip-path="url(#cC)" style="fill:none;stroke:rgb(255, 34, 34);color:rgb(255, 255, 255);stroke-width:2.8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- B: QUADRADO ROSA — atrás de A, na frente de C -->
+  <path d="M58,38 A22,22 0 0,0 58,82" fill="none" stroke="#ff33cc" stroke-width="2.2" clip-path="url(#lB)" style="fill:none;stroke:rgb(255, 51, 204);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <path d="M58,38 A22,22 0 0,1 58,82" fill="none" stroke="#ff33cc" stroke-width="2.2" style="fill:none;stroke:rgb(255, 51, 204);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <rect x="45" y="47" width="26" height="26" rx="2" fill="none" stroke="#ff33cc" stroke-width="2.8" filter="url(#fp)" clip-path="url(#cB)" style="fill:none;stroke:rgb(255, 51, 204);color:rgb(255, 255, 255);stroke-width:2.8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- A: TRIÂNGULO VERDE — na frente de tudo -->
+  <circle cx="24" cy="60" r="22" fill="none" stroke="#00ee44" stroke-width="2.2" style="fill:none;stroke:rgb(0, 238, 68);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <polygon points="24,43 40,72 8,72" fill="none" stroke="#00ee44" stroke-width="2.8" stroke-linejoin="round" filter="url(#fg)" clip-path="url(#cA)" style="fill:none;stroke:rgb(0, 238, 68);color:rgb(255, 255, 255);stroke-width:2.8px;stroke-linecap:butt;stroke-linejoin:round;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Arcos dianteiros na mesma cor — A sobre B, B sobre C, C sobre D -->
+  <path d="M24,38 A22,22 0 0,1 24,82" fill="none" stroke="#00ee44" stroke-width="2.2" clip-path="url(#rA)" style="fill:none;stroke:rgb(0, 238, 68);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <path d="M58,38 A22,22 0 0,1 58,82" fill="none" stroke="#ff33cc" stroke-width="2.2" clip-path="url(#rB)" style="fill:none;stroke:rgb(255, 51, 204);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <path d="M92,38 A22,22 0 0,1 92,82" fill="none" stroke="#ff2222" stroke-width="2.2" clip-path="url(#rC)" style="fill:none;stroke:rgb(255, 34, 34);color:rgb(255, 255, 255);stroke-width:2.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- TEXTO branco Ragedap -->
+  <text x="162" y="78" font-family="'Ragedap', 'Arial Black', Impact, sans-serif" font-size="52" font-weight="400" fill="white" letter-spacing="2" style="fill:rgb(255, 255, 255);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Ragedap, &quot;Arial Black&quot;, Impact, sans-serif;font-size:52px;font-weight:400;text-anchor:start;dominant-baseline:auto">Gamerboxd</text>
+</svg>

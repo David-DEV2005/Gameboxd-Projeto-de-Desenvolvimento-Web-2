@@ -1,0 +1,216 @@
+/* GERAL E TIPOGRAFIA */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #12141D !important;
+    color: #EDEDED !important;
+}
+
+/* NAVEGAÇÃO (HEADER / MENU)*/
+.navbar {
+    background-color: #17172b !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #E2E2E2 !important;
+    transition: 0.3s ease-in-out;
+    border: 1px solid transparent; 
+    border-radius: 8px; 
+    padding: 8px 16px !important; 
+}
+
+.nav-offwhite {
+    color: #E2E2E2 !important;
+    transition: 0.3s ease-in-out;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 8px 16px !important;
+}
+
+/* BOTÕES */
+.btn-primary {
+    background-color: #4361ee;
+    border-color: #4361ee;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #3f37c9;
+    transform: scale(1.02);
+}
+
+/* FORMULÁRIOS E INPUTS */
+.form-control, textarea {
+    background-color: #12141D !important;
+    border: 1px solid #2B2F44 !important;
+    color: #EDEDED !important;
+}
+
+.form-control::placeholder, textarea::placeholder {
+    color: #6C758D !important;
+}
+
+.form-control:focus, textarea:focus {
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25) !important;
+    border-color: #4361ee !important;
+}
+
+/* COMPONENTES (CARDS E ALERTAS) */
+.card, .list-group-item {
+    background-color: #1C1F2E !important;
+    border: 1px solid #2B2F44 !important;
+    color: #F8F9FA !important;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Cards escuros para os jogos */
+.card-dark {
+    background-color: #1C1F2E !important; 
+    border: 1px solid #2B2F44 !important; 
+    color: #F8F9FA !important; 
+    border-radius: 10px; 
+}
+
+.card-dark .text-muted {
+    color: #9BA1B5 !important;
+}
+
+/* Alertas */
+.alert-light {
+    background-color: #1C1F2E !important;
+    border: 1px solid #2B2F44 !important;
+    color: #9BA1B5 !important;
+}
+
+/* CLASSES UTILITÁRIAS*/
+.text-primary {
+    color: #4361ee !important;
+    font-weight: 600;
+}
+
+/* RESPOSTAS DO Chat...os */
+.bg-light {
+    background-color: #12141D !important;
+}
+
+/* AJUSTES DE TEXTOS E CORES DE FONTE*/
+.text-muted {
+    color: #A0A5B5 !important;
+}
+
+.text-dark {
+    color: #EDEDED !important;
+}
+
+.bg-light a {
+    color: #00E5FF !important;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.bg-light a:hover {
+    color: #FFFFFF !important;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+/* CHAT DA SALA VIP */
+.bg-white {
+    background-color: #2B2F44 !important; 
+    color: #EDEDED !important;
+    border: 1px solid #3f445e !important;
+}
+
+/* EFEITOS NEON DO MENU (BORDAS E TEXTO ESTILO PLAYSTATION)*/
+.hover-ps-green:hover {
+    border-color: #00ee44 !important;
+    text-shadow: 0 0 8px rgba(0, 238, 68, 0.6) !important;
+    box-shadow: 0 0 12px rgba(0, 238, 68, 0.3) !important;
+}
+
+.hover-ps-pink:hover {
+    border-color: #ff33cc !important;
+    text-shadow: 0 0 8px rgba(255, 51, 204, 0.6) !important;
+    box-shadow: 0 0 12px rgba(255, 51, 204, 0.3) !important;
+}
+
+.hover-ps-red:hover {
+    border-color: #ff2222 !important;
+    text-shadow: 0 0 8px rgba(255, 34, 34, 0.6) !important;
+    box-shadow: 0 0 12px rgba(255, 34, 34, 0.3) !important;
+}
+
+.hover-ps-blue:hover {
+    border-color: #2288ff !important;
+    text-shadow: 0 0 8px rgba(34, 136, 255, 0.6) !important;
+    box-shadow: 0 0 12px rgba(34, 136, 255, 0.3) !important;
+}
+
+.hover-neon-white:hover {
+    color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* ABAS DE NAVEGAÇÃO (PERFIL) */
+.nav-tabs {
+    border-bottom: 1px solid #2B2F44;
+}
+.nav-tabs .nav-link {
+    color: #9BA1B5;
+    border: none;
+    font-weight: 600;
+}
+.nav-tabs .nav-link:hover {
+    color: #EDEDED;
+}
+.nav-tabs .nav-link.active {
+    color: #EDEDED !important;
+    background-color: transparent !important;
+    border-bottom: 3px solid #4361ee !important;
+}
+
+/* COR DAS FAIXAS DE USUÁRIO */
+.bg-novato {
+    background-color: rgba(0, 238, 68, 0.1);
+    color: #00ee44 !important;
+    border: 1px solid #00ee44 !important;
+    box-shadow: 0 0 10px rgba(0, 238, 68, 0.2);
+}
+
+.bg-explorador {
+    background-color: rgba(255, 51, 204, 0.1) !important; 
+    color: #ff33cc !important; 
+    border: 1px solid #ff33cc !important; 
+    box-shadow: 0 0 10px rgba(255, 51, 204, 0.2);
+}
+
+.bg-critico_veterano {
+    background-color: rgba(255, 34, 34, 0.1) !important; 
+    color: #ff2222 !important; 
+    border: 1px solid #ff2222 !important; 
+    box-shadow: 0 0 10px rgba(255, 34, 34, 0.2);
+}
+
+.bg-lenda_lobby {
+    background-color: rgba(34, 136, 255, 0.1) !important; 
+    color: #2288ff !important; 
+    border: 1px solid #2288ff !important; 
+    box-shadow: 0 0 10px rgba(34, 136, 255, 0.2);
+}
