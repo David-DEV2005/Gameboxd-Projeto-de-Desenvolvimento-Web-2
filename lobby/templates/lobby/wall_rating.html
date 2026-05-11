@@ -1,5 +1,4 @@
 {% extends 'lobby/base.html' %}
-
 {% block content %}
 <div class="row justify-content-center mt-4">
     <div class="col-md-8">
@@ -13,15 +12,13 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div>
-                                    <span class="badge bg-primary rounded-pill">@{{ review.usuario.username }}</span>
+                                    <span class="badge bg-primary rounded-pill">{{ review.usuario.username }}</span>
                                     <span class="text-muted ms-2 small">avaliou o jogo</span>
                                     <a href="{% url 'game_wall' review.jogo.id %}" class="fw-bold text-decoration-none ms-1">
                                         {{ review.jogo.titulo }}
                                     </a>
                                 </div>
-                                <div class="badge bg-success fs-6">
-                                    Nota: {{ review.nota }}
-                                </div>
+                            <span class="render-estrelas float-end" data-nota="{{ review.nota }}"></span>
                             </div>
                             
                             <p class="card-text mt-3 bg-light p-3 rounded border">
