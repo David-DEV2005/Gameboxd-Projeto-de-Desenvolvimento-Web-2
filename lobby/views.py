@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil, Chato, RespostaChato 
+from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil, Chato, RespostaChato, MensagemGrupo
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -98,7 +98,6 @@ def group(request, id):
             jogo_foco=jogo,
             lider=request.user,
             nome=nome_digitado,
-            descricao=descricao_digitada,
             vagas_disponiveis=int(vagas_digitadas)
         )
         
@@ -250,3 +249,30 @@ def responder_chato(request, post_id):
             )
 
     return redirect('mural_chatos')
+
+@login_required
+def sala_grupo(request, grupo_id):
+    grupo = Grupo.objects.get(id=grupo_id)
+
+#Verificação de segurança 
+    is_lider = request.user == grupo.lider
+    is_membro = SolicitacaoGrupo.objects.filter(grupo=grupo, usuario=request.user, status='Aprovada').exists()
+
+    if not (is_lider or is_membro):
+        # Se não for da equipe, chuta ele de volta pro mural do jogo
+        return redirect('game_wall', id=grupo.jogo_foco.id)
+
+#Lógica da mensagem
+    if request.method == 'POST':
+        texto = request.POST.get('texto')
+        if texto:
+            MensagemGrupo.objects.create(grupo=grupo, usuario=request.user, texto=texto)
+            return redirect('sala_grupo', grupo_id=grupo.id)
+
+#Carregar o Chato
+    mensagens = grupo.mensagens.all().order_by('data_envio')
+
+    return render(request, 'lobby/chat_group.html', {
+        'grupo': grupo, 
+        'mensagens': mensagens
+    })

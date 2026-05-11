@@ -1,10 +1,37 @@
 from django.db import models
 from django.contrib.auth.models import User 
 
+GENERO_CHOICES = (
+    ('Ação', 'Ação e Aventura'),
+    ('Arcade', 'Arcade / Luta'),
+    ('RPG', 'RPG / MMORPG'),
+    ('FPS', 'Tiro em Primeira Pessoa (FPS)'),
+    ('Esportes', 'Esportes / Corrida'),
+    ('Estratégia', 'Estratégia / MOBA'),
+)
+
+PLATAFORMA_CHOICES = (
+    ('PC', 'PC (Windows/Steam)'),
+    ('PS5', 'PlayStation 5'),
+    ('PS4', 'PlayStation 4'),
+    ('Xbox Series', 'Xbox Series X/S'),
+    ('Xbox One', 'Xbox One'),
+    ('Switch', 'Nintendo Switch'),
+    ('Mobile', 'Smartphone / Mobile'),
+)
+
+ESTILO_GRUPO_CHOICES = (
+    ('Casual', 'Casual (Só por diversão)'),
+    ('Competitivo', 'Competitivo (Tryhard/Ranked)'),
+    ('Campanha', 'Foco em Missões / Campanha'),
+    ('Iniciantes', 'Aceita Iniciantes (Mentoria)'),
+)
+
+
 class Jogo(models.Model):
     titulo = models.CharField(max_length=200)
-    genero = models.CharField(max_length=100)
-    plataforma = models.CharField(max_length=100)
+    genero = models.CharField(max_length=50, choices=GENERO_CHOICES)
+    plataforma = models.CharField(max_length=50, choices=PLATAFORMA_CHOICES)
     nota_media = models.FloatField(default=0.0)
 
     def __str__(self):
@@ -21,8 +48,9 @@ class Grupo(models.Model):
     nome = models.CharField(max_length=150)
     jogo_foco = models.ForeignKey(Jogo, on_delete=models.CASCADE)
     lider = models.ForeignKey(User, on_delete=models.CASCADE)
-    descricao = models.TextField()
     vagas_disponiveis = models.IntegerField()
+    estilo = models.CharField(max_length=50, choices=ESTILO_GRUPO_CHOICES, default='Casual')
+    
 
     def __str__(self):
         return self.nome
@@ -78,3 +106,13 @@ class RespostaChato(models.Model):
 
     def __str__(self):
         return f"Resposta de {self.usuario.username}"
+    
+class MensagemGrupo(models.Model):
+    grupo = models.ForeignKey(Grupo, related_name='mensagens', on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField(max_length=500)
+    data_envio = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} no grupo {self.grupo.nome}"
+    
