@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil
+from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil, Chato, RespostaChato 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -224,3 +224,29 @@ def editar_perfil(request):
         form = PerfilForm(instance=perfil)
 
     return render(request, 'lobby/edit_profile.html', {'form': form})
+
+@login_required
+def mural_chatos(request):
+    if request.method == 'POST':
+        texto_post = request.POST.get('texto')
+        if texto_post:
+            Chato.objects.create(usuario=request.user, texto=texto_post)
+            return redirect('mural_chatos')
+
+    posts = Chato.objects.all().order_by('-data_publicacao')
+    return render(request, 'lobby/chatos.html', {'posts': posts})
+
+@login_required
+def responder_chato(request, post_id):
+    if request.method == 'POST':
+        texto_resposta = request.POST.get('texto_resposta')
+        chato_original = Chato.objects.get(id=post_id)
+
+        if texto_resposta:
+            RespostaChato.objects.create(
+                chato=chato_original,
+                usuario=request.user,
+                texto=texto_resposta
+            )
+
+    return redirect('mural_chatos')

@@ -60,3 +60,21 @@ class Perfil(models.Model):
 
     def __str__(self):
         return f"Perfil de {self.user.username}"
+    
+class Chato(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField(max_length=280)
+    data_publicacao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} disse: {self.texto[:20]}..."
+
+
+class RespostaChato(models.Model):
+    chato = models.ForeignKey(Chato, related_name='respostas', on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField(max_length=280)
+    data_resposta = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Resposta de {self.usuario.username}"

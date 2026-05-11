@@ -31,6 +31,10 @@ urlpatterns = [
 
     path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
 
+    path('chatos/', views.mural_chatos, name='mural_chatos'),
+    
+    path('chatos/<int:post_id>/responder/', views.responder_chato, name='responder_chato'),
+
 ]
 
 
