@@ -11,7 +11,6 @@
             
             <div class="card-body">
                 <form method="POST" action="{% url 'add_game' %}">
-                    
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="titulo" class="form-label">Título do Jogo</label>
@@ -19,13 +18,30 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="genero" class="form-label">Gênero</label>
-                        <input type="text" class="form-control" id="genero" name="genero" placeholder="Ex: RPG de Ação" required>
+                        <label class="form-label fw-bold">Gênero</label>
+                        <select name="genero" class="form-select" required>
+                            <option value="" disabled selected>Selecione um gênero...</option>
+                            <option value="Ação">Ação e Aventura</option>
+                            <option value="Arcade">Arcade / Luta</option>
+                            <option value="RPG">RPG / MMORPG</option>
+                            <option value="FPS">Tiro em Primeira Pessoa (FPS)</option>
+                            <option value="Esportes">Esportes / Corrida</option>
+                            <option value="Estratégia">Estratégia / MOBA</option>
+                        </select>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label for="plataforma" class="form-label">Plataforma</label>
-                        <input type="text" class="form-control" id="plataforma" name="plataforma" placeholder="Ex: PC, PS5, Xbox" required>
+                        <label class="form-label fw-bold">Plataforma</label>
+                        <select name="plataforma" class="form-select" required>
+                            <option value="" disabled selected>Selecione onde jogar...</option>
+                            <option value="PC">PC (Windows/Steam)</option>
+                            <option value="PS5">PlayStation 5</option>
+                            <option value="PS4">PlayStation 4</option>
+                            <option value="Xbox Series">Xbox Series X/S</option>
+                            <option value="Xbox One">Xbox One</option>
+                            <option value="Switch">Nintendo Switch</option>
+                            <option value="Mobile">Smartphone / Mobile</option>
+                        </select>
                     </div>
                     
                     <div class="d-flex justify-content-between mt-4">
