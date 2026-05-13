@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
+from django.db.models import Avg
 
 GENERO_CHOICES = (
     ('Ação', 'Ação e Aventura'),
@@ -43,6 +44,32 @@ class Avaliacao(models.Model):
     nota = models.FloatField()
     comentario = models.TextField()
     data_publicacao = models.DateTimeField(auto_now_add=True)
+    
+    def save(self, *args, **kwargs):
+        # Primeiro salva a própria avaliação no banco de dados
+        super().save(*args, **kwargs)
+        
+        # Pega todas as notas desse jogo e calcula a média 
+        media = Avaliacao.objects.filter(jogo=self.jogo).aggregate(Avg('nota'))['nota__avg']
+        
+        # Atualiza a nota_media do jogo 
+        self.jogo.nota_media = round(media, 1) if media else 0.0
+        self.jogo.save()
+
+    def delete(self, *args, **kwargs):
+        # Salva qual é o jogo antes de apagar a avaliação 
+        jogo_relacionado = self.jogo
+        
+        # Apaga a avaliação do banco
+        super().delete(*args, **kwargs)
+        
+        # Recalcula a média sem essa avaliação e atualiza a nota_media do jogo
+        media = Avaliacao.objects.filter(jogo=jogo_relacionado).aggregate(Avg('nota'))['nota__avg']
+        jogo_relacionado.nota_media = round(media, 1) if media else 0.0
+        jogo_relacionado.save()
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.jogo.titulo} ({self.nota})"
 
 class Grupo(models.Model):
     nome = models.CharField(max_length=150)
@@ -115,4 +142,6 @@ class MensagemGrupo(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} no grupo {self.grupo.nome}"
+    
+
     
