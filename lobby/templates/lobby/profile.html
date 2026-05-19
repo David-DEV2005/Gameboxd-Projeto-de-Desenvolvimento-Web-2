@@ -1,4 +1,5 @@
 {% extends 'lobby/base.html' %}
+
 {% block content %}
 <div class="row mt-5">
     <div class="col-md-4 text-center">
@@ -42,6 +43,12 @@
                                 <span class="render-estrelas" data-nota="{{ r.nota }}"></span>
                             </div>
                             <p class="mb-0 small text-muted">"{{ r.comentario }}"</p>
+                            <form method="POST" action="{% url 'deletar_avaliacao' r.id %}" class="mt-2 text-end" onsubmit="return confirm('Tem certeza que deseja apagar esta avaliação para sempre?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    Apagar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 {% empty %}
@@ -51,7 +58,7 @@
 
             <div class="tab-pane fade" id="grupos" role="tabpanel">
                 <div class="row mt-3">
-                    {% for grupo in grupos %}
+                    {% for grupo in meus_grupos %}
                         <div class="col-md-6 mb-3">
                             <div class="card card-dark h-100 shadow-sm border-0 p-3">
                                 <h6 class="fw-bold text-primary mb-1">{{ grupo.nome }}</h6>
