@@ -77,7 +77,7 @@ class Grupo(models.Model):
     lider = models.ForeignKey(User, on_delete=models.CASCADE)
     vagas_disponiveis = models.IntegerField()
     estilo = models.CharField(max_length=50, choices=ESTILO_GRUPO_CHOICES, default='Casual')
-    
+    membros = models.ManyToManyField(User, related_name='grupos_que_participo', blank=True)
 
     def __str__(self):
         return self.nome

@@ -4,6 +4,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import PerfilForm
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect
+from django.db.models import Q
+
 
 
 
@@ -83,6 +87,78 @@ def rating(request, id):
     # Se não for POST, mostra a tela vazia com o formulário
     return render(request, 'lobby/rating.html', {'jogo': jogo})
 
+@login_required
+def del_rating(request, id):
+    
+    # Busca a avaliação pelo ID 
+    avaliacao = get_object_or_404(Avaliacao, id=id) #testar caso dê erro. 
+
+    # Somente o dono da avaliação pode apagar a sua avaliação
+    if avaliacao.usuario == request.user:
+        if request.method == 'POST':
+            avaliacao.delete()
+            messages.success(request, 'Avaliação apagada com sucesso!')
+    else:
+        messages.error(
+            request, 'Você não tem permissão para apagar esta avaliação.')
+
+    # Redireciona de volta para o perfil
+    return redirect('my_profile')
+
+def wall_rating(request):
+    # Pega qual filtro o usuário clicou 
+    ordenacao = request.GET.get('sort', 'recentes')
+
+    # Dicionário que traduz o clique do botão para o comando do BD
+    filtros_validos = {
+        'recentes': '-id',           
+        'antigas': 'id',             
+        'maior_nota': '-nota',       
+        'menor_nota': 'nota',        
+    }
+
+    # força o padrão 'recentes' caso o parâmetro 'sort' seja inválido ou não exista 
+    filtro_banco = filtros_validos.get(ordenacao, '-id')
+
+    # Puxa todas as avaliações aplicando o filtro escolhido
+    avaliacoes = Avaliacao.objects.all().order_by(filtro_banco)
+
+    # Manda os dados e a variável 'sort_atual' para o HTML reconhecer qual botão marcar
+    context = {
+        'avaliacoes': avaliacoes,
+        'sort_atual': ordenacao,
+    }
+
+    return render(request, 'lobby/wall_rating.html', context)
+
+def order_rating(request, id):
+    jogo = get_object_or_404(Jogo, id=id)
+
+    # Pega qual filtro o usuário clicou
+    ordenacao = request.GET.get('sort', 'recentes')
+
+    # Dicionário para traduzir o clique no comando do BD
+    filtros_validos = {
+        'recentes': '-data_publicacao',
+        'antigas': 'data_publicacao',
+        'maior_nota': '-nota',
+        'menor_nota': 'nota',
+    }
+
+    # força para 'recentes' caso o parâmetro 'sort' seja inválido ou não exista
+    filtro_banco = filtros_validos.get(ordenacao, '-data_publicacao')
+
+    # Faz a busca das avaliações aplicando o ".order_by()" dinâmico
+    avaliacoes = Avaliacao.objects.filter(jogo=jogo).order_by(filtro_banco)
+
+    # Manda as avaliações e qual filtro está ativo para a tela
+    context = {
+        'jogo': jogo,
+        'avaliacoes': avaliacoes,
+        'sort_atual': ordenacao,  
+    }
+    return render(request, 'lobby/game_wall.html', context)
+
 def group(request, id):
     # Puxa o jogo onde o grupo vai ser criado
     jogo = Jogo.objects.get(id=id)
@@ -90,7 +166,6 @@ def group(request, id):
     if request.method == 'POST':
         # Pega os dados digitados no formulário
         nome_digitado = request.POST.get('nome')
-        descricao_digitada = request.POST.get('descricao')
         vagas_digitadas = request.POST.get('vagas_disponiveis')
 
         # Cria o grupo no banco de dados com os dados digitados e o usuario como lider. 
@@ -157,6 +232,7 @@ def responder_solicitacao(request, solicitacao_id, acao):
                 solicitacao.status = 'Aprovada'
                 solicitacao.grupo.vagas_disponiveis -= 1
                 solicitacao.grupo.save()
+                solicitacao.grupo.membros.add(solicitacao.usuario)
                 
             elif acao == 'recusar':
                 solicitacao.status = 'Rejeitada'
@@ -182,31 +258,30 @@ def register(request):
 
     return render(request, 'lobby/register.html', {'form': form})
 
-def wall_rating(request):
-    # Puxa todas as avaliações do banco de dados. 
-    avaliacoes = Avaliacao.objects.all().order_by('-id')
-
-    return render(request, 'lobby/wall_rating.html', {'avaliacoes': avaliacoes})
-
 @login_required
 def my_profile(request):
     # Puxa ou cria o perfil caso não exista
-    perfil, created = Perfil.objects.get_or_create(user=request.user)
+    perfil, created = Perfil.objects.get_or_create(user=request.user) 
 
-
+    # Busca todas as avaliações que o usuário fez
     minhas_reviews = Avaliacao.objects.filter(usuario=request.user).order_by('-id')
 
+    # Busca os grupos onde ele é o líder ou membro 
+    meus_grupos = Grupo.objects.filter(
+        Q(lider=request.user) | Q(membros=request.user)
+    ).distinct()
 
-    meus_grupos = Grupo.objects.filter(lider=request.user)
-
+    # Calcula a influência
     influencia = perfil.calcular_influencia()
 
-    return render(request, 'lobby/profile.html', {
+    context = {
         'perfil': perfil,
         'reviews': minhas_reviews,
-        'grupos': meus_grupos,
+        'meus_grupos': meus_grupos, 
         'influencia': influencia
-    })
+    }
+
+    return render(request, 'lobby/profile.html', context)
 
 @login_required
 def editar_perfil(request):
@@ -249,6 +324,18 @@ def responder_chato(request, post_id):
             )
 
     return redirect('mural_chatos')
+
+def atualizar_chat(request, id):
+    # Busca o grupo e as mensagens dele
+    grupo = get_object_or_404(Grupo, id=id)
+    mensagens = MensagemGrupo.objects.filter(grupo=grupo).order_by('data_envio')
+
+    context = {
+        'mensagens': mensagens,
+        'user': request.user 
+    }
+
+    return render(request, 'lobby/chat_att.html', context)
 
 @login_required
 def sala_grupo(request, grupo_id):

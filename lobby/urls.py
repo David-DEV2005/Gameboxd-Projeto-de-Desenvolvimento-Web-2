@@ -39,6 +39,10 @@ urlpatterns = [
 
     path('alterar-senha/', auth_views.PasswordChangeView.as_view(template_name='lobby/password_change.html', success_url='/perfil/'), name='password_change'),
 
+    path('avaliacao/<int:id>/deletar/', views.del_rating, name='deletar_avaliacao'),
+    
+    path('grupo/<int:id>/atualizar-chat/', views.atualizar_chat, name='atualizar_chat'),
+
 ]
 
 
