@@ -1,7 +1,6 @@
 {% extends 'lobby/base.html' %}
 {% block content %}
 {% load static %}
-
 <div class="row mb-4">
     <div class="col-12 bg-white p-4 rounded shadow-sm border">
         <h1 class="display-5">{{ jogo.titulo }}</h1>
@@ -15,7 +14,26 @@
             <h3>Avaliações</h3>
             <a href="{% url 'rating' jogo.id %}" class="btn btn-outline-success btn-sm">Escrever Review</a>
         </div>
-        
+        <div class="d-flex justify-content-end mb-4">
+            <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle border-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="text-muted me-1">Ordenar:</span>
+                    {% if sort_atual == 'recentes' %} Mais Recentes
+                    {% elif sort_atual == 'antigas' %} Mais Antigas
+                    {% elif sort_atual == 'maior_nota' %} Maior Nota
+                    {% elif sort_atual == 'menor_nota' %} Menor Nota
+                    {% endif %}
+                </button>
+                
+                <ul class="dropdown-menu dropdown-menu-dark shadow">
+                    <li><a class="dropdown-item {% if sort_atual == 'recentes' %}active{% endif %}" href="?sort=recentes">Mais Recentes</a></li>
+                    <li><a class="dropdown-item {% if sort_atual == 'antigas' %}active{% endif %}" href="?sort=antigas">Mais Antigas</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-success {% if sort_atual == 'maior_nota' %}active{% endif %}" href="?sort=maior_nota">Maior Nota (↑)</a></li>
+                    <li><a class="dropdown-item text-danger {% if sort_atual == 'menor_nota' %}active{% endif %}" href="?sort=menor_nota">Menor Nota (↓)</a></li>
+                </ul>
+            </div>
+        </div>
         {% for avaliacao in avaliacoes %}
         <div class="card mb-2">
             <div class="card-body">
@@ -49,7 +67,7 @@
                     {% if not user.is_authenticated %}
                         <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-sm">Faça login para entrar</a>
 
-                    {% elif user == grupo.lider or grupo.id in meus_grupos_ids %}
+                    {% elif user == grupo.lider or user in grupo.membros.all %}
                         <a href="{% url 'sala_grupo' grupo.id %}" class="btn btn-success btn-sm fw-bold shadow-sm">🚪 Entrar na Sala</a>
 
                     {% else %}

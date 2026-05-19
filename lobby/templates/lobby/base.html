@@ -21,19 +21,19 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item me-3 mt-1">
-                        <a class="nav-link nav-offwhite hover-ps-green fw-bold" href="{% url 'wall_rating' %}">⭐ Feed de Reviews</a>
+                        <a class="nav-link nav-offwhite hover-ps-green fw-bold" href="{% url 'wall_rating' %}">Feed de Reviews</a>
                     </li>
                     <li class="nav-item me-3 mt-1">
-                        <a class="nav-link nav-offwhite hover-ps-pink fw-bold" href="{% url 'mural_chatos' %}">🗣️ Chat...os</a>
+                        <a class="nav-link nav-offwhite hover-ps-pink fw-bold" href="{% url 'mural_chatos' %}">Chat...os</a>
                     </li>
                     
                     {% if user.is_authenticated %}
                         <li class="nav-item me-3 mt-1">
-                            <a class="nav-link nav-offwhite hover-ps-red fw-bold" href="{% url 'painel_notificacoes' %}">🔔 Notificações</a>
+                            <a class="nav-link nav-offwhite hover-ps-red fw-bold" href="{% url 'painel_notificacoes' %}">Notificações</a>
                         </li>
 
                         <li class="nav-item me-3 mt-1">
-                            <a class="nav-link nav-offwhite hover-ps-blue fw-bold" href="{% url 'my_profile' %}">👤 Meu Perfil</a>
+                            <a class="nav-link nav-offwhite hover-ps-blue fw-bold" href="{% url 'my_profile' %}">Meu Perfil</a>
                         </li>
 
                     {% else %}

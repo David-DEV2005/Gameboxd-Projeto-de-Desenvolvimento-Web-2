@@ -1,4 +1,5 @@
 {% extends 'lobby/base.html' %}
+
 {% block content %}
 <div class="row justify-content-center mt-4">
     <div class="col-md-8">
@@ -7,6 +8,43 @@
 
         {% if avaliacoes %}
             <div class="d-flex flex-column gap-3">
+                <div class="d-flex justify-content-end mb-4">
+                    <div class="dropdown">
+                        <button class="btn btn-dark dropdown-toggle border-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="text-muted me-1">Ordenar:</span>
+                            
+                            {% if sort_atual == 'recentes' %} Mais Recentes
+                            {% elif sort_atual == 'antigas' %} Mais Antigas
+                            {% elif sort_atual == 'maior_nota' %} Maior Nota
+                            {% elif sort_atual == 'menor_nota' %} Menor Nota
+                            {% endif %}
+                        </button>
+                        
+                        <ul class="dropdown-menu dropdown-menu-dark shadow">
+                            <li>
+                                <a class="dropdown-item {% if sort_atual == 'recentes' %}active{% endif %}" href="?sort=recentes">
+                                    Mais Recentes
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {% if sort_atual == 'antigas' %}active{% endif %}" href="?sort=antigas">
+                                    Mais Antigas
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-success {% if sort_atual == 'maior_nota' %}active{% endif %}" href="?sort=maior_nota">
+                                    Maior Nota (↑)
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger {% if sort_atual == 'menor_nota' %}active{% endif %}" href="?sort=menor_nota">
+                                    Menor Nota (↓)
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 {% for review in avaliacoes %}
                     <div class="card shadow-sm border-0">
                         <div class="card-body">
