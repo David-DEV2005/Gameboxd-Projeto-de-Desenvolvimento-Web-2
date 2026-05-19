@@ -1,0 +1,16 @@
+{% for msg in mensagens %}
+    <div class="mb-3 {% if msg.usuario == user %}text-end{% endif %}">
+        <small class="text-muted fw-bold">@{{ msg.usuario.username }}</small><br>
+        
+        <div class="d-inline-block p-2 rounded shadow-sm text-start {% if msg.usuario == user %}bg-primary text-white{% else %}bg-white border{% endif %}" style="max-width: 75%;">
+            {{ msg.texto }}
+        </div>
+        
+        <div style="font-size: 0.70rem;" class="text-muted mt-1">{{ msg.data_envio|date:"d/m H:i" }}</div>
+    </div>
+{% empty %}
+    <div class="text-center text-muted my-auto">
+        <h5 class="mb-2">A sala está vazia!</h5>
+        <p>Diga olá para a sua equipe e combine a próxima partida! 👋</p>
+    </div>
+{% endfor %}
