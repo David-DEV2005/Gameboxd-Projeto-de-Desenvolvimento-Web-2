@@ -1,12 +1,22 @@
 {% extends 'lobby/base.html' %}
-
 {% block content %}
+
 <div class="row justify-content-center mt-4">
     <div class="col-md-7">
         
         <div class="d-flex align-items-center mb-4">
             <h2 class="mb-0 me-2">🗣️ Chat...os</h2>
             <span class="text-muted mt-2">Solte o verbo!</span>
+        </div>
+
+        <div class="d-flex justify-content-end mb-3 me-2"> 
+            
+            <button id="btn-atualizar-feed" class="btn btn-outline-light btn-sm rounded-pill shadow-sm px-3 position-relative" onclick="window.location.reload();">
+                Recarregar Feed    
+                <span id="contador-novos" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" style="font-size: 0.65rem;">
+                    0
+                </span>
+            </button>
         </div>
 
         <div class="card shadow-sm border-primary mb-4">
@@ -63,4 +73,15 @@
 
     </div>
 </div>
+<script>
+    const notificadorSocket = new WebSocket('ws://' + window.location.host + '/ws/notificacao-feed/');
+    let postsNovosContador = 0;
+
+    notificadorSocket.onmessage = function(e) {
+        const badge = document.querySelector('#contador-novos');
+        postsNovosContador += 1;
+        badge.innerText = postsNovosContador;
+        badge.classList.remove('d-none');
+    };
+</script>
 {% endblock %}
