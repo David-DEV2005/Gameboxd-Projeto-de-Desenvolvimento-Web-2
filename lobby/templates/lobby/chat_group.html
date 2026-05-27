@@ -1,5 +1,6 @@
 {% extends 'lobby/base.html' %}
 {% block content %}
+
 <div class="row justify-content-center mt-4">
     <div class="col-md-8">
         
@@ -20,12 +21,13 @@
 
             </div>
         </div>
-
-        <form method="POST">
+        
+        <form id="form-chat" method="POST">
             {% csrf_token %}
             <div class="input-group shadow-sm">
-                <input type="text" name="texto" class="form-control p-3 border-primary" placeholder="Digite sua mensagem para a equipe..." required autocomplete="off" autofocus>
-                <button class="btn btn-primary px-4 fw-bold" type="submit">Enviar 🚀</button>
+                <input type="text" id="input-mensagem" name="texto" class="form-control p-3 border-primary" placeholder="Digite sua mensagem para a equipe..." required autocomplete="off" autofocus>
+                
+                <button id="btn-enviar" class="btn btn-primary px-4 fw-bold" type="submit">Enviar 🚀</button>
             </div>
         </form>
 
@@ -33,20 +35,56 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const caixaChat = document.getElementById('caixa-de-mensagens');
-        
-        caixaChat.scrollTop = caixaChat.scrollHeight;
+    const grupoId = "{{ grupo.id }}"; 
+    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + grupoId + '/');
 
-        function atualizarChatSozinho() {
-            fetch("{% url 'atualizar_chat' grupo.id %}")
-                .then(resposta => resposta.text())
-                .then(html_novo => {
-                    caixaChat.innerHTML = html_novo;
-                    caixaChat.scrollTop = caixaChat.scrollHeight;
-                });
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const chatLog = document.querySelector('#caixa-de-mensagens');
+        const usuarioAtual = "{{ request.user.username }}";
+
+        const dataAtual = new Date();
+        const horaFormatada = dataAtual.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'}) + ' ' + 
+                              dataAtual.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+
+        let bolhaHtml = "";
+
+        if (data.usuario === usuarioAtual) {
+            bolhaHtml = `
+            <div class="mb-3 text-end">
+                <small class="text-muted fw-bold">@${data.usuario}</small><br>
+                <div class="d-inline-block p-2 rounded shadow-sm text-start bg-primary text-white" style="max-width: 75%;">
+                    ${data.mensagem}
+                </div>
+                <div style="font-size: 0.70rem;" class="text-muted mt-1">${horaFormatada}</div>
+            </div>`;
+        } else {
+            bolhaHtml = `
+            <div class="mb-3">
+                <small class="text-muted fw-bold">@${data.usuario}</small><br>
+                <div class="d-inline-block p-2 rounded shadow-sm text-start bg-white border" style="max-width: 75%;">
+                    ${data.mensagem}
+                </div>
+                <div style="font-size: 0.70rem;" class="text-muted mt-1">${horaFormatada}</div>
+            </div>`;
         }
-        setInterval(atualizarChatSozinho, 3000);
-    });
+
+        chatLog.innerHTML += bolhaHtml;
+        chatLog.scrollTop = chatLog.scrollHeight;
+    };
+
+    document.querySelector('#form-chat').onsubmit = function(e) {
+        e.preventDefault();
+
+        const mensagemInput = document.querySelector('#input-mensagem');
+        const mensagemTexto = mensagemInput.value;
+
+        chatSocket.send(JSON.stringify({
+            'mensagem': mensagemTexto
+        }));
+        
+        mensagemInput.value = '';
+    };
 </script>
+
 {% endblock %}
