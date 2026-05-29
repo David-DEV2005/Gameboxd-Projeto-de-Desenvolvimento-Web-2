@@ -47,6 +47,18 @@ urlpatterns = [
     
     path('noticias/', views.aba_noticias, name='noticias'),
 
+    path('recuperar-senha/', auth_views.PasswordResetView.as_view(template_name='lobby/password_rec.html'), name='password_reset'),
+
+    path('recuperar-senha/enviado/', auth_views.PasswordResetDoneView.as_view(template_name='lobby/password_rec_env.html'), name='password_reset_done'),
+
+    path('recuperar-senha/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='lobby/password_new.html'), name='password_reset_confirm'),
+
+    path('recuperar-senha/concluido/', auth_views.PasswordResetCompleteView.as_view(template_name='lobby/password_conc.html'), name='password_reset_complete'),
+
+
+
+
+
 
 ]
 

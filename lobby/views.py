@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil, Chato, RespostaChato, MensagemGrupo
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import PerfilForm
@@ -11,6 +11,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.conf import settings
 import requests
+from .forms import RegistroForm 
 
 
 def index(request):
@@ -233,16 +234,17 @@ def responder_solicitacao(request, solicitacao_id, acao):
 
 
 def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('index')
-    else:
-        form = UserCreationForm()
+   if request.method == 'POST':
+       form = RegistroForm(request.POST)
+     
+       if form.is_valid():
+           user = form.save()
+           login(request, user) # Faz o login automático
+           return redirect('index') # Redireciona para a página principal
+   else:        
+       form = RegistroForm()
+   return render(request, 'lobby/register.html', {'form': form})
 
-    return render(request, 'lobby/register.html', {'form': form})
 
 
 @login_required
