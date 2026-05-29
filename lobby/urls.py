@@ -43,6 +43,11 @@ urlpatterns = [
     
     path('grupo/<int:id>/atualizar-chat/', views.atualizar_chat, name='atualizar_chat'),
 
+    path('grupo/<int:grupo_id>/sair/', views.sair_do_grupo, name='sair_do_grupo'),
+    
+    path('noticias/', views.aba_noticias, name='noticias'),
+
+
 ]
 
 
