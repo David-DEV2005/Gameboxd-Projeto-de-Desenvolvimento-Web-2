@@ -1,5 +1,6 @@
+import os
 from django.shortcuts import render, redirect
-from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil, Chato, RespostaChato, MensagemGrupo
+from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil, Chato, RespostaChato, MensagemGrupo, User
 # from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -15,10 +16,46 @@ from .forms import RegistroForm
 
 
 def index(request):
-     # Busca todos os jogos cadastrados no banco 
+    total_jogos = Jogo.objects.count()
+    total_reviews = Avaliacao.objects.count()
+    total_usuarios = User.objects.count()
+
+
+    # Puxa as 3 avaliações mais recentes pela data de publicação
+    ultimas_reviews = Avaliacao.objects.select_related('usuario', 'jogo').order_by('-data_publicacao')[:3]
+
+
+    #Como as notas já estão salvas no banco, podemos ordernar diretamente por ela. 
+    jogos_em_alta = Jogo.objects.order_by('-nota_media')[:3]
+
+    ultimos_chatos = Chato.objects.select_related('usuario').order_by('-data_publicacao')[:3]
+
     jogos = Jogo.objects.all()
-    # Envia a lista de jogos para o HTML para listar na página inicial
-    return render(request, 'lobby/index.html', {'jogos': jogos})
+
+    url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={os.environ.get('API_KEY')}'
+   
+    try:
+        resposta = requests.get(url, timeout=3)
+        dados = resposta.json()
+        artigos = dados.get('articles', [])
+    except requests.exceptions.RequestException:
+        artigos = []
+
+
+    context = {
+        'total_jogos': total_jogos,
+        'total_reviews': total_reviews,
+        'total_usuarios': total_usuarios,
+        'ultimas_reviews': ultimas_reviews,
+        'jogos': jogos,
+        'jogos_em_alta': jogos_em_alta,
+        'noticias': artigos,
+        'ultimos_chatos': ultimos_chatos,
+    }
+
+
+    return render(request, 'lobby/index.html', context)
+
 
 
 def add_game(request):
