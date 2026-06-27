@@ -13,6 +13,8 @@ urlpatterns = [
 
     path('jogo/<int:id>/grupo/novo/', views.group, name='group'),
 
+    path('jogos/carregar-mais/', views.carregar_mais_jogos, name='carregar_mais_jogos'),
+
     path('register/', views.register, name='register'),
     
     path('login/', auth_views.LoginView.as_view(template_name='lobby/login.html'), name='login'),

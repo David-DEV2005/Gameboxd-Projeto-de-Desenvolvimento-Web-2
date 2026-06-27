@@ -1,7 +1,8 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-from .models import Grupo, MensagemGrupo
+from .models import Grupo, MensagemGrupo, SolicitacaoGrupo
+
 
 class AlertaFeedConsumer(WebsocketConsumer):
     def connect(self):
@@ -30,6 +31,30 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.grupo_id = self.scope['url_route']['kwargs']['grupo_id']
         self.nome_da_sala = f'chat_grupo_{self.grupo_id}'
+        usuario = self.scope['user']
+
+
+        if not usuario.is_authenticated:
+            self.close()
+            return
+
+
+        try:
+            grupo = Grupo.objects.get(id=self.grupo_id)
+        except Grupo.DoesNotExist:
+            self.close()
+            return
+
+
+        is_lider = usuario == grupo.lider
+        is_membro = SolicitacaoGrupo.objects.filter(
+            grupo=grupo, usuario=usuario, status='Aprovada').exists()
+
+
+        if not (is_lider or is_membro):
+            self.close()
+            return
+
 
         async_to_sync(self.channel_layer.group_add)(
             self.nome_da_sala,
@@ -37,16 +62,23 @@ class ChatConsumer(WebsocketConsumer):
         )
         self.accept()
 
+
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
             self.nome_da_sala,
             self.channel_name
         )
 
+
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         mensagem = text_data_json['mensagem']
-        usuario = self.scope['user'] # Pega o objeto do usuário logado
+        usuario = self.scope['user']
+
+
+        if not usuario.is_authenticated:
+            return
+
 
         grupo_obj = Grupo.objects.get(id=self.grupo_id)
         MensagemGrupo.objects.create(
@@ -64,6 +96,7 @@ class ChatConsumer(WebsocketConsumer):
                 'usuario': usuario.username
             }
         )
+
 
     def chat_message(self, event):
         self.send(text_data=json.dumps({

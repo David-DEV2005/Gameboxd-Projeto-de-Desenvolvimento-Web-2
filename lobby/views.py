@@ -13,44 +13,81 @@ from asgiref.sync import async_to_sync
 from django.conf import settings
 import requests
 from .forms import RegistroForm 
+from django.core.cache import cache
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.template.loader import render_to_string
+from django.http import JsonResponse
+JOGOS_POR_PAGINA = 20
+def obter_versao_catalogo():
+    return cache.get('catalogo_versao', 1)
+
+
+def bump_versao_catalogo():
+    cache.set('catalogo_versao', obter_versao_catalogo() + 1, None)  # sem TTL, fica até o próximo bump
+
 
 
 def index(request):
-    total_jogos = Jogo.objects.count()
-    total_reviews = Avaliacao.objects.count()
-    total_usuarios = User.objects.count()
+    estatisticas = cache.get('estatisticas_home')
+    if estatisticas is None:
+        estatisticas = {
+            'total_jogos': Jogo.objects.count(),
+            'total_reviews': Avaliacao.objects.count(),
+            'total_usuarios': User.objects.count(),
+        }
+        cache.set('estatisticas_home', estatisticas, 60 * 10)
 
 
     # Puxa as 3 avaliações mais recentes pela data de publicação
     ultimas_reviews = Avaliacao.objects.select_related('usuario', 'jogo').order_by('-data_publicacao')[:3]
 
 
-    #Como as notas já estão salvas no banco, podemos ordernar diretamente por ela. 
-    jogos_em_alta = Jogo.objects.order_by('-nota_media')[:3]
+    # Como você já salva a nota_media no model Jogo, basta ordenar por ela!
+    jogos_em_alta = cache.get('jogos_em_alta')
+    if jogos_em_alta is None:
+        jogos_em_alta = list(Jogo.objects.order_by('-nota_media')[:3])
+        cache.set('jogos_em_alta', jogos_em_alta, 60 * 15)
+
 
     ultimos_chatos = Chato.objects.select_related('usuario').order_by('-data_publicacao')[:3]
 
-    jogos = Jogo.objects.all()
 
-    url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={os.environ.get('API_KEY')}'
-   
-    try:
-        resposta = requests.get(url, timeout=3)
-        dados = resposta.json()
-        artigos = dados.get('articles', [])
-    except requests.exceptions.RequestException:
-        artigos = []
+    todos_os_jogos = Jogo.objects.all().order_by('-id')
+    paginador = Paginator(todos_os_jogos, JOGOS_POR_PAGINA)
+    jogos = paginador.page(1)
+
+
+    versao = obter_versao_catalogo()
+    chave_catalogo = f'catalogo_pagina_1_v{versao}'
+    catalogo_html = cache.get(chave_catalogo)
+    if catalogo_html is None:
+        catalogo_html = render_to_string('lobby/more_games.html', {'jogos': jogos})
+        cache.set(chave_catalogo, catalogo_html, 60 * 30)
+
+
+    artigos = cache.get('noticias_home')
+    if artigos is None:
+        url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={os.environ.get("API_KEY")}'
+        try:
+            resposta = requests.get(url, timeout=3)
+            dados = resposta.json()
+            artigos = dados.get('articles', [])
+        except requests.exceptions.RequestException:
+            artigos = []
+        cache.set('noticias_home', artigos, 60 * 20) # guarda por 20 minutos
 
 
     context = {
-        'total_jogos': total_jogos,
-        'total_reviews': total_reviews,
-        'total_usuarios': total_usuarios,
+        'total_jogos': estatisticas['total_jogos'],
+        'total_reviews': estatisticas['total_reviews'],
+        'total_usuarios': estatisticas['total_usuarios'],
         'ultimas_reviews': ultimas_reviews,
         'jogos': jogos,
+        'mais_jogos': jogos.has_next(),
         'jogos_em_alta': jogos_em_alta,
         'noticias': artigos,
         'ultimos_chatos': ultimos_chatos,
+        'catalogo_html': catalogo_html,
     }
 
 
@@ -59,31 +96,57 @@ def index(request):
 
 
 def add_game(request):
-     # Se o usuário clicou no botão "salvar" do formulário
     if request.method == 'POST':
         titulo_digitado = request.POST.get('titulo')
         genero_digitado = request.POST.get('genero')
         plataforma_digitada = request.POST.get('plataforma')
+        capa_url_digitada = request.POST.get('capa_url') 
 
-        # Verifica se já existe um jogo com esse exato título no banco
-        jogo_existente = Jogo.objects.filter(
-            titulo__iexact=titulo_digitado).first()
+        jogo_existente = Jogo.objects.filter(titulo__iexact=titulo_digitado).first()
 
         if jogo_existente:
-            # Se o jogo já existe, redireciona o usuário para a página desse jogo específico
             return redirect('game_wall', id=jogo_existente.id)
         else:
-            # Se não existe, cria o jogo novo no banco de dados
             novo_jogo = Jogo.objects.create(
                 titulo=titulo_digitado,
                 genero=genero_digitado,
-                plataforma=plataforma_digitada
+                plataforma=plataforma_digitada,
+                capa_url=capa_url_digitada or None 
             )
-            # Redireciona para a página do jogo que acabou de ser criado
+            bump_versao_catalogo()
             return redirect('game_wall', id=novo_jogo.id)
 
-    # Se o usuário só acessou a página pelo link, mostra o formulário HTML vazio
     return render(request, 'lobby/add_game.html')
+
+def carregar_mais_jogos(request):
+    pagina_solicitada = request.GET.get('pagina', 2)
+    versao = obter_versao_catalogo()
+    chave = f'catalogo_pagina_{pagina_solicitada}_v{versao}'
+
+
+    resultado_cacheado = cache.get(chave)
+    if resultado_cacheado is not None:
+        return JsonResponse(resultado_cacheado)
+
+
+    todos_os_jogos = Jogo.objects.all().order_by('-id')
+    paginador = Paginator(todos_os_jogos, JOGOS_POR_PAGINA)
+
+
+    try:
+        pagina_jogos = paginador.page(pagina_solicitada)
+    except (EmptyPage, PageNotAnInteger):
+        return JsonResponse({'html': '', 'tem_mais': False})
+
+
+    resultado = {
+        'html': render_to_string('lobby/more_games.html', {'jogos': pagina_jogos}, request=request),
+        'tem_mais': pagina_jogos.has_next(),
+    }
+
+
+    cache.set(chave, resultado, 60 * 30)
+    return JsonResponse(resultado)
 
 
 def game_wall(request, id):
@@ -427,24 +490,17 @@ def atualizar_chat(request, id):
 
 @login_required
 def aba_noticias(request):
-    # Chave real do site
-    api_key = settings.MINHA_API_KEY 
-    
-    # Busca focada no Brasil trazendo até 12 resultados
-    termo_de_busca = 'videogame OR playstation OR xbox OR nintendo OR esports'
-    url = f'https://gnews.io/api/v4/search?q={termo_de_busca}&lang=pt&country=br&max=12&apikey={api_key}'
+    artigos = cache.get('noticias_home')
+    if artigos is None:
+        api_key = '69ee28245a3517099582ef5dfb2ed84f'
+        url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={api_key}'
+        try:
+            resposta = requests.get(url, timeout=3)
+            dados = resposta.json()
+            artigos = dados.get('articles', [])
+        except requests.exceptions.RequestException:
+            artigos = []
+        cache.set('noticias_home', artigos, 60 * 20)
 
-    try:
-        # Faz a chamada para a internet
-        resposta = requests.get(url)
-        resposta.raise_for_status() # Verifica se a API não deu erro
-        
-        dados = resposta.json()
-        artigos = dados.get('articles', [])
-        
-    except requests.exceptions.RequestException as e:
-        # Proteção: Se der erro, enviamos uma lista vazia e a tela lida com isso
-        artigos = []
-        print(f"Erro ao buscar notícias: {e}")
 
     return render(request, 'lobby/noticies.html', {'noticias': artigos})
