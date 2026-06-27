@@ -1,7 +1,4 @@
-YAML
 name: Gameboxd CI
-
-# O robô será ativado toda vez que houver um Push na branch main
 on:
   push:
     branches: [ "main" ]
@@ -10,9 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest # Cria o servidor Linux virtual
-
-    # Configura um mini PostgreSQL temporário (para rodar os testes)
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:15
@@ -29,7 +24,7 @@ jobs:
           --health-retries 5
 
     steps:
-    - name: Baixando o código do repositório
+    - name: Baixando o codigo
       uses: actions/checkout@v4
 
     - name: Instalando o Python 3.14.3
@@ -37,13 +32,14 @@ jobs:
       with:
         python-version: '3.14.3'
 
-    - name: Instalando as bibliotecas (requirements.txt)
+    - name: Instalando dependencias
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Rodando a Suíte de Testes do Django
+    - name: Rodando os testes
       env:
+        SECRET_KEY: chave_secreta_falsa_apenas_para_ci
         DB_NAME: banco_ci
         DB_USER: usuario_ci
         DB_PASSWORD: senha_ci
