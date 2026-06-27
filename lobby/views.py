@@ -243,17 +243,23 @@ def group(request, id):
     if request.method == 'POST':
         nome_digitado = request.POST.get('nome')
         vagas_digitadas = request.POST.get('vagas_disponiveis')
+        descricao_digitada = request.POST.get('descricao', '')
+        estilo_digitado = request.POST.get('estilo', 'Casual')
+
         novo_grupo = Grupo.objects.create(
             jogo_foco=jogo,
             lider=request.user,
             nome=nome_digitado,
-            vagas_disponiveis=int(vagas_digitadas)
+            vagas_disponiveis=int(vagas_digitadas),
+            descricao=descricao_digitada,
+            estilo=estilo_digitado,
         )
         novo_grupo.membros.add(request.user)
 
         return redirect('game_wall', id=jogo.id)
-
+   
     return render(request, 'lobby/group.html', {'jogo': jogo})
+
 
 
 @login_required
@@ -263,37 +269,38 @@ def solicitar_entrada(request, grupo_id):
     if request.user == grupo.lider:
         return redirect('game_wall', id=grupo.jogo_foco.id)
 
-    ja_solicitou = SolicitacaoGrupo.objects.filter(
-        grupo=grupo, usuario=request.user).exists()
+    solicitacao_existente = SolicitacaoGrupo.objects.filter(
+        grupo=grupo, usuario=request.user).first()
 
-    if not ja_solicitou:
-        SolicitacaoGrupo.objects.create(
-            grupo=grupo,
-            usuario=request.user
-        )
+
+    if solicitacao_existente is None:
+        SolicitacaoGrupo.objects.create(grupo=grupo, usuario=request.user)
+    elif solicitacao_existente.status == 'Rejeitada':
+        solicitacao_existente.status = 'Pendente'
+        solicitacao_existente.save()
+
 
     return redirect('game_wall', id=grupo.jogo_foco.id)
 
 @login_required
 def sair_do_grupo(request, grupo_id):
     grupo = get_object_or_404(Grupo, id=grupo_id)
-    
-    # Se o usuário atual for o líder, precisamos passar o cargo adiante
+
     if grupo.lider == request.user:
-        # Busca o primeiro membro cadastrado que não seja o próprio líder
+
         proximo_lider = grupo.membros.exclude(id=request.user.id).first()
-        
+       
         if proximo_lider:
             grupo.lider = proximo_lider
             grupo.save()
-            
-    # Remove o usuário da lista de membros ativos
+           
     grupo.membros.remove(request.user)
-    
-    # Se não restou mais ninguém no grupo, ele é deletado
+
+    SolicitacaoGrupo.objects.filter(grupo=grupo, usuario=request.user).delete()
+
     if grupo.membros.count() == 0:
         grupo.delete()
-        
+
     return redirect('my_profile')
 
 
@@ -318,21 +325,24 @@ def responder_solicitacao(request, solicitacao_id, acao):
         solicitacao = SolicitacaoGrupo.objects.get(id=solicitacao_id)
 
         if request.user == solicitacao.grupo.lider:
-
-            if acao == 'aceitar' and solicitacao.grupo.vagas_disponiveis > 0:
-                solicitacao.status = 'Aprovada'
-                solicitacao.grupo.membros.add(solicitacao.usuario)
-                solicitacao.grupo.vagas_disponiveis -= 1
-                solicitacao.grupo.save()
+            if acao == 'aceitar':
+                if solicitacao.grupo.vagas_disponiveis > 0:
+                    solicitacao.status = 'Aprovada'
+                    solicitacao.grupo.membros.add(solicitacao.usuario)
+                    solicitacao.grupo.vagas_disponiveis -= 1
+                    solicitacao.grupo.save()
+                    solicitacao.save()
+                else:
+                    messages.error(request, 'Não há vagas disponíveis neste grupo.')
 
             elif acao == 'recusar':
                 solicitacao.status = 'Rejeitada'
-
-            solicitacao.save()
+                solicitacao.save()
 
     return redirect('painel_notificacoes')
 
 
+@login_required
 def register(request):
    if request.method == 'POST':
        form = RegistroForm(request.POST)
@@ -383,23 +393,20 @@ def mural_chatos(request):
     if request.method == 'POST':
         texto_post = request.POST.get('texto')
         if texto_post:
-            # Salva a postagem nova no banco
             Chato.objects.create(usuario=request.user, texto=texto_post)
             
-            # Dispara o alarme para acender a bolinha vermelha para todos
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
-                'feed_global_notificacoes', # Nome da sala configurada no consumer
+                'feed_global_notificacoes', 
                 {
                     'type': 'disparar_alerta'
                 }
             )
-            
+           
             return redirect('mural_chatos')
 
     posts = Chato.objects.all().order_by('-data_publicacao')
     return render(request, 'lobby/chatos.html', {'posts': posts})
-
 
 @login_required
 def responder_chato(request, post_id):
@@ -408,21 +415,22 @@ def responder_chato(request, post_id):
         chato_original = Chato.objects.get(id=post_id)
 
         if texto_resposta:
-            # Salva a resposta da postagem no banco
             RespostaChato.objects.create(
                 chato=chato_original,
                 usuario=request.user,
                 texto=texto_resposta
             )
-            
-            # Dispara o alarme também quando alguém responde a um post
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                'feed_global_notificacoes',
-                {
-                    'type': 'disparar_alerta'
-                }
-            )
+
+            try:
+                channel_layer = get_channel_layer()
+                async_to_sync(channel_layer.group_send)(
+                    'feed_global_notificacoes',
+                    {
+                        'type': 'disparar_alerta'
+                    }
+                )
+            except Exception:
+                pass
 
     return redirect('mural_chatos')
 
@@ -452,35 +460,16 @@ def sala_grupo(request, grupo_id):
         'mensagens': mensagens
     })
 
-
-def order_rating(request, id):
-    jogo = get_object_or_404(Jogo, id=id)
-
-    ordenacao = request.GET.get('sort', 'recentes')
-
-    filtros_validos = {
-        'recentes': '-data_publicacao',
-        'antigas': 'data_publicacao',
-        'maior_nota': '-nota',
-        'menor_nota': 'nota',
-    }
-
-    filtro_banco = filtros_validos.get(ordenacao, '-data_publicacao')
-
-    avaliacoes = Avaliacao.objects.filter(jogo=jogo).order_by(filtro_banco)
-
-    context = {
-        'jogo': jogo,
-        'avaliacoes': avaliacoes,
-        'sort_atual': ordenacao,
-    }
-    return render(request, 'lobby/game_wall.html', context)
-
+@login_required
 def atualizar_chat(request, id):
-
     grupo = get_object_or_404(Grupo, id=id)
+    is_lider = request.user == grupo.lider
+    is_membro = SolicitacaoGrupo.objects.filter(grupo=grupo, usuario=request.user, status='Aprovada').exists()
+
+    if not (is_lider or is_membro):
+        return redirect('game_wall', id=grupo.jogo_foco.id)
+
     mensagens = MensagemGrupo.objects.filter(grupo=grupo).order_by('data_envio')
-    
     context = {
         'mensagens': mensagens,
         'user': request.user
