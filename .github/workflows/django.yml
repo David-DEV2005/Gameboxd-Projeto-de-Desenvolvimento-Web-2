@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    
     services:
       postgres:
         image: postgres:15
@@ -22,6 +23,11 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+          
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
 
     steps:
     - name: Baixando o codigo
@@ -45,6 +51,7 @@ jobs:
         DB_PASSWORD: senha_ci
         DB_HOST: localhost
         DB_PORT: 5432
+        REDIS_HOST: localhost 
         EMAIL_HOST_USER: fake_email@teste.com
         EMAIL_HOST_PASSWORD: fake_password
         MINHA_API_KEY: chave_falsa_apenas_para_teste
