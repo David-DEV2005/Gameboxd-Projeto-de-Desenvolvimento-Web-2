@@ -57,6 +57,7 @@ class Avaliacao(models.Model):
         self.jogo.nota_media = round(media, 1) if media else 0.0
         self.jogo.save()
         cache.delete('jogos_em_alta')
+        cache.delete('estatisticas_home')
 
     def delete(self, *args, **kwargs):
 
@@ -68,6 +69,7 @@ class Avaliacao(models.Model):
         jogo_relacionado.nota_media = round(media, 1) if media else 0.0
         jogo_relacionado.save()
         cache.delete('jogos_em_alta')
+        cache.delete('estatisticas_home')
 
     def __str__(self):
         return f"{self.usuario.username} - {self.jogo.titulo} ({self.nota})"
