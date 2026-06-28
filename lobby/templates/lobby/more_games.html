@@ -1,0 +1,27 @@
+{% for jogo in jogos %}
+<div class="col-md-3 col-sm-6 mb-4">
+    <a href="{% url 'game_wall' jogo.id %}" class="text-decoration-none">
+        <div class="card h-100 bg-dark card-hover-borda" style="border: 1px solid rgba(226, 226, 226, 0.3);">
+            {% if jogo.capa_url %}
+                <img src="{{ jogo.capa_url }}" alt="{{ jogo.titulo }}" class="card-img-top" style="height: 140px; object-fit: cover;">
+            {% else %}
+                <div class="d-flex align-items-center justify-content-center bg-secondary bg-opacity-25" style="height: 140px;">
+                    <i class="bi bi-controller text-white-50" style="font-size: 2.5rem;"></i>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h6 class="nav-offwhite fw-bold text-truncate" title="{{ jogo.titulo }}">{{ jogo.titulo }}</h6>
+                <span class="badge bg-primary bg-opacity-25 text-primary mb-2">{{ jogo.plataforma }}</span>
+                <p class="text-white-50 small mb-0">{{ jogo.genero }}</p>
+            </div>
+            <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
+                <div class="render-estrelas" data-nota="{{ jogo.nota_media }}" style="font-size: 0.9rem;"></div>
+            </div>
+        </div>
+    </a>
+</div>
+{% empty %}
+<div class="col-12">
+    <p class="text-white-50">Nenhum jogo cadastrado no momento.</p>
+</div>
+{% endfor %}
