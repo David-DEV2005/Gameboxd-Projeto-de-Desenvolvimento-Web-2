@@ -1,8 +1,8 @@
-from logging import config
+from decouple import config
+import logging
 import os
 from django.shortcuts import render, redirect
 from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil, Chato, RespostaChato, MensagemGrupo, User
-# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import PerfilForm
@@ -18,6 +18,7 @@ from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+
 JOGOS_POR_PAGINA = 20
 def obter_versao_catalogo():
     return cache.get('catalogo_versao', 1)
@@ -66,16 +67,17 @@ def index(request):
         cache.set(chave_catalogo, catalogo_html, 60 * 30)
 
 
-    artigos = cache.get('noticias_home')
+    artigos = cache.get('noticias_home_index')
     if artigos is None:
-        url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={os.environ.get("API_KEY")}'
+        api_key = config('API_KEY')
+        url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={api_key}'
         try:
             resposta = requests.get(url, timeout=3)
             dados = resposta.json()
             artigos = dados.get('articles', [])
         except requests.exceptions.RequestException:
             artigos = []
-        cache.set('noticias_home', artigos, 60 * 20) # guarda por 20 minutos
+        cache.set('noticias_home_index', artigos, 60 * 20)
 
 
     context = {
@@ -483,7 +485,7 @@ def aba_noticias(request):
     artigos = cache.get('noticias_home')
     if artigos is None:
         API_KEY = config('API_KEY')
-        url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={API_KEY}'
+        url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=20&apikey={API_KEY}'
         try:
             resposta = requests.get(url, timeout=3)
             dados = resposta.json()
