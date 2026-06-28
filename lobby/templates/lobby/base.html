@@ -24,13 +24,19 @@
                     
                     {% if user.is_authenticated %}
                         <li class="nav-item me-3 mt-1">
-                            <a class="nav-link nav-offwhite hover-neon-white fw-bold" href="{% url 'painel_notificacoes' %}"> Notificações</a>
+                            <a class="nav-link nav-offwhite hover-neon-white fw-bold" href="{% url 'painel_notificacoes' %}">
+                                <i class="bi bi-bell fs-5"></i>
+                            </a>
                         </li>
 
                         <li class="nav-item me-3 mt-1">
-                            <a class="nav-link nav-offwhite hover-neon-white fw-bold" href="{% url 'my_profile' %}"> Meu Perfil</a>
+                            <a class="nav-link nav-offwhite hover-neon-white fw-bold d-flex align-items-center gap-2" href="{% url 'my_profile' %}">
+                                <img src="{{ user.perfil.foto.url }}" 
+                                    alt="{{ user.username }}"
+                                    style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; border: 2px solid rgba(226,226,226,0.3);">
+                                {{ user.username }}
+                            </a>
                         </li>
-
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'login' %}">Entrar</a>
