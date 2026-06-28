@@ -74,7 +74,8 @@
     </div>
 </div>
 <script>
-    const notificadorSocket = new WebSocket('ws://' + window.location.host + '/ws/notificacao-feed/');
+    const protocoloWs = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const notificadorSocket = new WebSocket(protocoloWs + window.location.host + '/ws/notificacao-feed/');
     let postsNovosContador = 0;
 
     notificadorSocket.onmessage = function(e) {

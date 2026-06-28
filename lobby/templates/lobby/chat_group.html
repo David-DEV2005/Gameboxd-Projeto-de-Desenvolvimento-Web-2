@@ -1,6 +1,5 @@
 {% extends 'lobby/base.html' %}
 {% block content %}
-
 <div class="row justify-content-center mt-4">
     <div class="col-md-8">
         
@@ -36,7 +35,8 @@
 
 <script>
     const grupoId = "{{ grupo.id }}"; 
-    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + grupoId + '/');
+    const protocoloWs = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const chatSocket = new WebSocket(protocoloWs + window.location.host + '/ws/chat/' + grupoId + '/');
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
@@ -78,7 +78,6 @@
 
         const mensagemInput = document.querySelector('#input-mensagem');
         const mensagemTexto = mensagemInput.value;
-
         chatSocket.send(JSON.stringify({
             'mensagem': mensagemTexto
         }));
