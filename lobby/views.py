@@ -1,3 +1,4 @@
+from logging import config
 import os
 from django.shortcuts import render, redirect
 from .models import Jogo, Avaliacao, Grupo, SolicitacaoGrupo, Perfil, Chato, RespostaChato, MensagemGrupo, User
@@ -481,8 +482,8 @@ def atualizar_chat(request, id):
 def aba_noticias(request):
     artigos = cache.get('noticias_home')
     if artigos is None:
-        api_key = '69ee28245a3517099582ef5dfb2ed84f'
-        url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={api_key}'
+        API_KEY = config('API_KEY')
+        url = f'https://gnews.io/api/v4/search?q=videogame OR esports&lang=pt&country=br&max=5&apikey={API_KEY}'
         try:
             resposta = requests.get(url, timeout=3)
             dados = resposta.json()
