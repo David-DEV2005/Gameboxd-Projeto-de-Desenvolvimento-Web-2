@@ -7,6 +7,14 @@
                 <h4 class="mb-0">Entrar no Lobby</h4>
             </div>
             <div class="card-body">
+                {% if request.GET.next %}
+                <div class="alert border text-center mb-3" style="background-color: rgba(226,226,226,0.1); border-color: rgba(226,226,226,0.3) !important;">
+                    <i class="bi bi-exclamation-triangle me-2 text-warning"></i>
+                    <span class="nav-offwhite">Você precisa estar logado para avaliar um jogo.</span>
+                    <br>
+                    <a href="{% url 'register' %}" class="fw-bold text-primary">Criar uma conta</a>
+                </div>
+                {% endif %}
                 <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}

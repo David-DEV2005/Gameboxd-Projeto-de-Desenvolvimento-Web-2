@@ -176,7 +176,7 @@ def game_wall(request, id):
 
     return render(request, 'lobby/game_wall.html', context)
 
-
+@login_required
 def rating(request, id):
     # Puxa o jogo que vai receber a avaliação
     jogo = Jogo.objects.get(id=id)
