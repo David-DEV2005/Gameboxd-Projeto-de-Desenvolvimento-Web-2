@@ -8,7 +8,7 @@
         {% endif %}
         <div>
             <h1 class="display-5">{{ jogo.titulo }}</h1>
-        <p class="lead">{{ jogo.genero }} / {{ jogo.plataforma }} | Nota Média Geral: ⭐ {{ jogo.nota_media }}</p>
+        <p class="lead">{{ jogo.genero }} / {{ jogo.plataforma }} | Nota Média Geral: <i class="bi bi-star-fill text-warning"></i> {{ jogo.nota_media }}</p>
     </div>
 </div>
 
@@ -41,7 +41,7 @@
         {% for avaliacao in avaliacoes %}
         <div class="card mb-2">
             <div class="card-body">
-                <h6 class="card-title">{{ avaliacao.usuario.username }} - Nota: ⭐ {{ avaliacao.nota }}</h6>
+                <h6 class="card-title">{{ avaliacao.usuario.username }} - Nota: <i class="bi bi-star-fill text-warning"></i> {{ avaliacao.nota }}</h6>
                 <p class="card-text">{{ avaliacao.comentario }}</p>
                 <small class="text-muted">Publicado em {{ avaliacao.data_publicacao|date:"d/m/Y" }}</small>
             </div>
@@ -72,7 +72,7 @@
                         <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-sm">Faça login para entrar</a>
 
                     {% elif user == grupo.lider or user in grupo.membros.all %}
-                        <a href="{% url 'sala_grupo' grupo.id %}" class="btn btn-success btn-sm fw-bold shadow-sm">🚪 Entrar na Sala</a>
+                        <a href="{% url 'sala_grupo' grupo.id %}" class="btn btn-success btn-sm fw-bold shadow-sm"><i class="bi bi-door-open me-1"></i> Entrar na Sala</a>
 
                     {% else %}
                         <form method="POST" action="{% url 'solicitar_entrada' grupo.id %}" class="m-0">

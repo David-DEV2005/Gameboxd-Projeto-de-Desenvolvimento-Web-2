@@ -9,7 +9,7 @@
             <span class="badge bg-{{ influencia.cor }} fs-6 mb-3">{{ influencia.rank }}</span>
             <p class="text-muted">{{ perfil.bio }}</p>
             <hr>
-            <a href="{% url 'editar_perfil' %}" class="btn btn-primary btn-sm w-100 mb-2">Editar Perfil</a>
+            <a href="{% url 'editar_perfil' %}" class="btn btn-primary btn-sm w-100 mb-2"><i class="bi bi-pencil me-1"></i> Editar Perfil</a>
             <a href="{% url 'password_change' %}" class="btn btn-outline-secondary btn-sm w-100 mb-2">Alterar Senha</a>
             <div class="mt-4 text-end"> <form method="POST" action="{% url 'logout' %}">
                     {% csrf_token %}
@@ -21,7 +21,7 @@
     </div>
 
     <div class="col-md-8">
-        <h3>Sua Jornada</h3>
+        <h3><i class="bi bi-controller me-2"></i> Sua Jornada</h3>
         
         <ul class="nav nav-tabs" id="perfilTabs" role="tablist">
             <li class="nav-item" role="presentation">
@@ -64,7 +64,7 @@
                                 <h6 class="fw-bold text-primary mb-1">{{ grupo.nome }}</h6>
                                 <p class="small text-muted mb-2">Jogo: {{ grupo.jogo_foco.titulo }}</p>
                                 
-                                <a href="{% url 'sala_grupo' grupo.id %}" class="btn btn-sm btn-success w-100 mt-auto">Entrar na Sala</a>
+                                <a href="{% url 'sala_grupo' grupo.id %}" class="btn btn-sm btn-success w-100 mt-auto"><i class="bi bi-door-open me-1"></i> Entrar na Sala</a>
                                 <a href="{% url 'sair_do_grupo' grupo.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Tem certeza que deseja abandonar este grupo?');"> Sair do Grupo</a>
                             </div>
                         </div>
