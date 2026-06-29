@@ -44,6 +44,12 @@
                         </select>
                     </div>
                     
+                    <div class="mb-3">
+                        <label for="capa_url" class="form-label">URL da Capa (opcional)</label>
+                        <input type="url" class="form-control" id="capa_url" name="capa_url"
+                            placeholder="https://exemplo.com/capa-do-jogo.jpg">
+                    </div>
+
                     <div class="d-flex justify-content-between mt-4">
                         <a href="{% url 'index' %}" class="btn btn-outline-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-success">Salvar Jogo</button>
