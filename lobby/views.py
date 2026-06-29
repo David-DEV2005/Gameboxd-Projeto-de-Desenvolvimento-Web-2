@@ -345,7 +345,6 @@ def responder_solicitacao(request, solicitacao_id, acao):
     return redirect('painel_notificacoes')
 
 
-@login_required
 def register(request):
    if request.method == 'POST':
        form = RegistroForm(request.POST)
