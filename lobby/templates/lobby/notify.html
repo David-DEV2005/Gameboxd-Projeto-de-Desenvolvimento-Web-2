@@ -5,7 +5,7 @@
         <h3 class="mb-4"><i class="bi bi-bell me-2"></i> Suas Notificações</h3>
 
         {% if solicitacoes %}
-            <div class="list-group shadow-sm">
+            <div class="list-group shadow-sm mb-5">
                 {% for req in solicitacoes %}
                     <div class="list-group-item d-flex justify-content-between align-items-center p-4">
                         <div>
@@ -17,7 +17,7 @@
                             </small>
                             <br>
                             <small class="text-muted">
-                                Vagas restantes neste grupo: {{ req.grupo.vagas_disponiveis }}
+                                Vagas restantes: {{ req.grupo.vagas_disponiveis }}
                             </small>
                         </div>
                         
@@ -36,9 +36,33 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="alert alert-light text-center p-5 shadow-sm">
+            <div class="alert alert-light text-center p-4 shadow-sm mb-5">
                 <h5 class="text-muted mb-0">Você não tem novas solicitações no momento.</h5>
             </div>
         {% endif %}
+
+        {% if historico %}
+            <h5 class="mb-3 text-muted"><i class="bi bi-clock-history me-2"></i> Histórico</h5>
+            <div class="list-group shadow-sm">
+                {% for req in historico %}
+                    <div class="list-group-item p-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">
+                                <strong class="text-primary">@{{ req.usuario.username }}</strong>
+                                solicitou entrada em <strong>{{ req.grupo.nome }}</strong>
+                            </h6>
+                            <small class="text-muted">{{ req.data_solicitacao|date:"d/m/Y H:i" }}</small>
+                        </div>
+                        {% if req.status == 'Aprovada' %}
+                            <span class="badge bg-success">Aprovada</span>
+                        {% else %}
+                            <span class="badge bg-danger">Rejeitada</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
 </div>
 {% endblock %}

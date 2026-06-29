@@ -24,8 +24,13 @@
                     
                     {% if user.is_authenticated %}
                         <li class="nav-item me-3 mt-1">
-                            <a class="nav-link nav-offwhite hover-neon-white fw-bold" href="{% url 'painel_notificacoes' %}">
+                            <a class="nav-link nav-offwhite hover-neon-white fw-bold position-relative" href="{% url 'painel_notificacoes' %}">
                                 <i class="bi bi-bell fs-5"></i>
+                                {% if total_notificacoes > 0 %}
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                                        {{ total_notificacoes }}
+                                    </span>
+                                {% endif %}
                             </a>
                         </li>
 

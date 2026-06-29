@@ -309,16 +309,18 @@ def sair_do_grupo(request, grupo_id):
 
 @login_required
 def painel_notificacoes(request):
-    meus_grupos = Grupo.objects.filter(lider=request.user)
-
-    solicitacoes_pendentes = SolicitacaoGrupo.objects.filter(
-        grupo__in=meus_grupos,
+    pendentes = SolicitacaoGrupo.objects.filter(
+        grupo__lider=request.user,
         status='Pendente'
-    ).order_by('-data_solicitacao')
+    )
+    historico = SolicitacaoGrupo.objects.filter(
+        grupo__lider=request.user,
+        status__in=['Aprovada', 'Rejeitada']
+    ).order_by('-data_solicitacao')[:20]
 
     return render(request, 'lobby/notify.html', {
-        'solicitacoes': solicitacoes_pendentes,
-        'meus_grupos': meus_grupos
+        'solicitacoes': pendentes,
+        'historico': historico
     })
 
 
