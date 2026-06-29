@@ -36,9 +36,13 @@
 
                         <li class="nav-item me-3 mt-1">
                             <a class="nav-link nav-offwhite hover-neon-white fw-bold d-flex align-items-center gap-2" href="{% url 'my_profile' %}">
-                                <img src="{{ user.perfil.foto.url }}" 
-                                    alt="{{ user.username }}"
-                                    style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; border: 2px solid rgba(226,226,226,0.3);">
+                                {% if user.perfil.foto %}
+                                    <img src="{{ user.perfil.foto.url }}" 
+                                        alt="{{ user.username }}"
+                                        style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; border: 2px solid rgba(226,226,226,0.3);">
+                                {% else %}
+                                    <i class="bi bi-person-circle fs-5"></i>
+                                {% endif %}
                                 {{ user.username }}
                             </a>
                         </li>

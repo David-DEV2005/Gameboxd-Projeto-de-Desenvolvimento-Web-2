@@ -4,7 +4,11 @@
 <div class="row mt-5">
     <div class="col-md-4 text-center">
         <div class="card shadow p-4">
-            <img src="{{ perfil.foto.url }}" class="rounded-circle img-thumbnail mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% if perfil.foto %}
+                <img src="{{ perfil.foto.url }}" class="rounded-circle img-thumbnail mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <i class="bi bi-person-circle text-secondary" style="font-size: 6rem;"></i>
+            {% endif %}
             <h4>{{ user.username }}</h4>
             <span class="badge bg-{{ influencia.cor }} fs-6 mb-3">{{ influencia.rank }}</span>
             <p class="text-muted">{{ perfil.bio }}</p>
