@@ -4,3 +4,4 @@ db.sqlite3
 media
 .env
 lobby/management/commands/data/games.json
+staticfiles/
