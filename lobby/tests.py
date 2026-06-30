@@ -6,12 +6,12 @@ from django.contrib.auth.models import User
 class JogoTestCase(TestCase):
     def test_nao_duplicar_jogo(self):
         # Cria o jogo
-        Jogo.objects.create(titulo="Hollow Knight", genero="Ação e Aventura", plataforma="PC") # <-- Mude aqui
+        Jogo.objects.create(titulo="Hollow Knight", genero="Ação e Aventura", plataforma="PC")
         
         # Tenta cadastrar de novo via POST
         response = self.client.post(reverse('add_game'), {
             'titulo': 'Hollow Knight',
-            'genero': 'Ação e Aventura', # <-- Mude aqui para ser igual ao de cima
+            'genero': 'Ação e Aventura', 
             'plataforma': 'PS5'
         })
         

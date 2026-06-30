@@ -1,4 +1,4 @@
-name: Gameboxd CI
+name: Gameboxd CI/CD
 on:
   push:
     branches: [ "main" ]
@@ -8,7 +8,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
     services:
       postgres:
         image: postgres:15
@@ -51,9 +50,31 @@ jobs:
         DB_PASSWORD: senha_ci
         DB_HOST: localhost
         DB_PORT: 5432
-        REDIS_HOST: localhost 
+        REDIS_HOST: localhost
         EMAIL_HOST_USER: fake_email@teste.com
         EMAIL_HOST_PASSWORD: fake_password
         MINHA_API_KEY: chave_falsa_apenas_para_teste
       run: |
         python manage.py test lobby
+
+  deploy:
+    name: Deploy no EC2
+    needs: test 
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' 
+    steps:
+      - name: Acessando o servidor e atualizando
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu/Gameboxd-Projeto-de-Desenvolvimento-Web-2
+            
+            
+            git pull origin main
+            
+            
+            docker compose down
+            docker compose up -d --build
