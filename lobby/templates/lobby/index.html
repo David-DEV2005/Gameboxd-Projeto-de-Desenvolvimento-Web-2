@@ -168,6 +168,18 @@
     </div>
 </div>
 
+<div class="row mb-4">
+    <div class="col-12">
+        <form method="GET" action="{% url 'index' %}#catalogo" class="d-flex gap-2">
+            <input type="text" name="busca" class="form-control bg-dark text-light border-secondary" 
+                   placeholder="Buscar jogo pelo nome..." value="{{ busca_atual }}">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
 <div class="row" id="lista-de-jogos" data-proxima-pagina="2">
     {{ catalogo_html|safe }}
 </div>

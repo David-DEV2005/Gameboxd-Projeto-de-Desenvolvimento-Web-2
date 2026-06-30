@@ -54,17 +54,23 @@ def index(request):
     ultimos_chatos = Chato.objects.select_related('usuario').order_by('-data_publicacao')[:3]
 
 
+    busca = request.GET.get('busca', '').strip()
     todos_os_jogos = Jogo.objects.all().order_by('-id')
+    if busca:
+        todos_os_jogos = todos_os_jogos.filter(titulo__icontains=busca)
     paginador = Paginator(todos_os_jogos, JOGOS_POR_PAGINA)
     jogos = paginador.page(1)
 
 
-    versao = obter_versao_catalogo()
-    chave_catalogo = f'catalogo_pagina_1_v{versao}'
-    catalogo_html = cache.get(chave_catalogo)
-    if catalogo_html is None:
+    if busca:
         catalogo_html = render_to_string('lobby/more_games.html', {'jogos': jogos})
-        cache.set(chave_catalogo, catalogo_html, 60 * 30)
+    else:
+        versao = obter_versao_catalogo()
+        chave_catalogo = f'catalogo_pagina_1_v{versao}'
+        catalogo_html = cache.get(chave_catalogo)
+        if catalogo_html is None:
+            catalogo_html = render_to_string('lobby/more_games.html', {'jogos': jogos})
+            cache.set(chave_catalogo, catalogo_html, 60 * 30)
 
 
     artigos = cache.get('noticias_home_index')
@@ -91,6 +97,7 @@ def index(request):
         'noticias': artigos,
         'ultimos_chatos': ultimos_chatos,
         'catalogo_html': catalogo_html,
+        'busca_atual': busca,
     }
 
 
