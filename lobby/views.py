@@ -176,11 +176,22 @@ def game_wall(request, id):
 
     avaliacoes = Avaliacao.objects.filter(jogo=jogo).order_by(filtro_banco)
 
+    grupos_com_solicitacao_pendente = []
+    if request.user.is_authenticated:
+        grupos_com_solicitacao_pendente = list(
+            SolicitacaoGrupo.objects.filter(
+                usuario=request.user,
+                grupo__in=grupos,
+                status='Pendente'
+            ).values_list('grupo_id', flat=True)
+        )
+
     context = {
         'jogo': jogo,
         'avaliacoes': avaliacoes,
         'sort_atual': ordenacao, 
         'grupos': grupos,
+        'grupos_com_solicitacao_pendente': grupos_com_solicitacao_pendente,
     }
 
     return render(request, 'lobby/game_wall.html', context)

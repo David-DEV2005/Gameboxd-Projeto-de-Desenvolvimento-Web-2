@@ -74,6 +74,11 @@
                     {% elif user == grupo.lider or user in grupo.membros.all %}
                         <a href="{% url 'sala_grupo' grupo.id %}" class="btn btn-success btn-sm fw-bold shadow-sm"><i class="bi bi-door-open me-1"></i> Entrar na Sala</a>
 
+                    {% elif grupo.id in grupos_com_solicitacao_pendente %}
+                        <button class="btn btn-outline-secondary btn-sm" disabled>
+                            <i class="bi bi-hourglass-split me-1"></i> Aguardando resposta
+                        </button>
+
                     {% else %}
                         <form method="POST" action="{% url 'solicitar_entrada' grupo.id %}" class="m-0">
                             {% csrf_token %}
