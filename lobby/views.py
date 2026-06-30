@@ -104,7 +104,7 @@ def index(request):
     return render(request, 'lobby/index.html', context)
 
 
-
+@login_required
 def add_game(request):
     if request.method == 'POST':
         titulo_digitado = request.POST.get('titulo')
