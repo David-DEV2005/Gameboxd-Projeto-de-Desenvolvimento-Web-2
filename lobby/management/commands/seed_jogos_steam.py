@@ -1,4 +1,4 @@
-import json
+import ijson
 import os
 from django.core.management.base import BaseCommand
 from lobby.models import Jogo
@@ -73,12 +73,20 @@ class Command(BaseCommand):
         criados = 0
         ignorados = 0
 
-        self.stdout.write('Carregando o JSON, isso pode levar alguns segundos...')
+        self.stdout.write('Carregando o JSON em streaming, isso pode levar alguns minutos...')
+        jogos_brutos = []
 
         with open(CAMINHO_JSON, encoding='utf-8') as arquivo:
-            dados = json.load(arquivo)
+            parser = ijson.kvitems(arquivo, '')
+            for chave, jogo_bruto in parser:
+                jogos_brutos.append({
+                    'name': jogo_bruto.get('name'),
+                    'genres': jogo_bruto.get('genres'),
+                    'tags': jogo_bruto.get('tags'),
+                    'header_image': jogo_bruto.get('header_image'),
+                    'recommendations': jogo_bruto.get('recommendations'),
+                })
 
-        jogos_brutos = list(dados.values())
         jogos_brutos.sort(key=lambda j: int(j.get('recommendations') or 0), reverse=True)
 
         for jogo_bruto in jogos_brutos[:LIMITE_JOGOS]:
