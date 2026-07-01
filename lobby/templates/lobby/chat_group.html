@@ -20,9 +20,9 @@
                     <span class="badge bg-primary rounded-pill">
                         <i class="bi bi-star-fill me-1"></i>{{ grupo.lider.username }}
                     </span>
-                    {% for solicitacao in grupo.solicitacaogrupo_set.all %}
-                        {% if solicitacao.status == 'Aprovada' %}
-                            <span class="badge bg-secondary rounded-pill">{{ solicitacao.usuario.username }}</span>
+                    {% for membro in grupo.membros.all %}
+                        {% if membro != grupo.lider %}
+                            <span class="badge bg-secondary rounded-pill">{{ membro.username }}</span>
                         {% endif %}
                     {% endfor %}
                 </div>

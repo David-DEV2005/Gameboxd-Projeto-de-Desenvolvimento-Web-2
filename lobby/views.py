@@ -308,18 +308,17 @@ def sair_do_grupo(request, grupo_id):
     grupo = get_object_or_404(Grupo, id=grupo_id)
 
     if grupo.lider == request.user:
-
         proximo_lider = grupo.membros.exclude(id=request.user.id).first()
-       
         if proximo_lider:
             grupo.lider = proximo_lider
             grupo.save()
-           
+
     grupo.membros.remove(request.user)
+    grupo.vagas_disponiveis += 1
+    grupo.save()
 
     SolicitacaoGrupo.objects.filter(grupo=grupo, usuario=request.user).delete()
-
-    if grupo.membros.count() == 0:
+    if grupo.membros.count() == 0 and grupo.lider == request.user:
         grupo.delete()
 
     return redirect('my_profile')
